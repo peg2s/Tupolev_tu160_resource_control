@@ -31,4 +31,13 @@ public class SavedData {
         }
         return null;
     }
+
+    public static int getComponentId(Component component) {
+        for (int i = 0; i<components.size(); i++) {
+            if (component.equals(components.get(i))) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

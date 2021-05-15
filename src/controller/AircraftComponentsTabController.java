@@ -14,11 +14,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import lombok.Getter;
+import lombok.SneakyThrows;
 
 public class AircraftComponentsTabController {
     @FXML
+    @Getter
     private TableView<Component> componentsList;
 
     @FXML
@@ -42,6 +43,12 @@ public class AircraftComponentsTabController {
     void initialize() {
         SavedData.readDataFromSave();
         componentsList.getItems().addAll(SavedData.components);
+        componentsList.setOnMouseClicked(e-> {
+            if (e.getClickCount() == 2) {
+               PersonalComponentPageController personalComponentPageController = openPersonalComponentPage();
+                personalComponentPageController.prepareComponentToEdit(componentsList.getSelectionModel().getSelectedItem());
+            }
+        });
         addComponentButton.setOnAction(e->openPersonalComponentPage());
         componentIdColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         componentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -56,8 +63,8 @@ public class AircraftComponentsTabController {
     }
 
     @FXML
-    void openPersonalComponentPage() {
-        try {
+    @SneakyThrows
+    PersonalComponentPageController openPersonalComponentPage() {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/personalComponentPage.fxml"));
             AnchorPane page = loader.load();
             Stage dialogStage = new Stage();
@@ -68,9 +75,13 @@ public class AircraftComponentsTabController {
             controller.setParentController(this);
             dialogStage.show();
             SavedData.readDataFromSave();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+            return controller;
+    }
+
+    void updateComponentsList() {
+        SavedData.readDataFromSave();
+        componentsList.getItems().clear();
+        componentsList.getItems().addAll(SavedData.components);
     }
 
 

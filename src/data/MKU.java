@@ -15,6 +15,7 @@ public class MKU extends Component {
     private int startsOnMainChannel;
     private int startsOnReserveChannel;
     private int flightOperatingTime;
+    private int rotationsCount;
     private String attachedToAircraft;
 
     @JsonCreator

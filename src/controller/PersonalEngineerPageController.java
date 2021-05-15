@@ -13,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -29,7 +30,8 @@ public class PersonalEngineerPageController {
     private Label fullNameField;
     @FXML
     private ListView<Aircraft> attachedAircraftList;
-
+    @Setter
+    private EngineersTabController engineersTabController;
     private Engineer engineer;
 
     public void setEngineer(Engineer engineer) {
@@ -55,6 +57,7 @@ public class PersonalEngineerPageController {
                 .forEach(e -> e.getAttachedAircrafts().remove(aircraftToUnattach));
         attachedAircraftList.getItems().remove(aircraftToUnattach);
         SavedData.saveCurrentStateData();
+        engineersTabController.updateEngineersList();
 
     }
 
@@ -76,8 +79,11 @@ public class PersonalEngineerPageController {
                 engineer.getAttachedAircrafts().addAll(e.getAttachedAircrafts());
             }
         });
+        attachedAircraftList.getItems().clear();
+        attachedAircraftList.getItems().addAll(engineer.getAttachedAircrafts());
         // сохраняем правки на компьютер
         SavedData.saveCurrentStateData();
+        engineersTabController.updateEngineersList();
     }
 
     public void showAttachAircraftDialog() {
@@ -92,8 +98,6 @@ public class PersonalEngineerPageController {
             AttachAircraftToEngineerController controller = loader.getController();
             Optional<Aircraft> selectedAircraft = controller.handleClickAttachButton();
             selectedAircraft.ifPresent(this::attachAircraft);
-            attachedAircraftList.getItems().clear();
-            attachedAircraftList.getItems().addAll(engineer.getAttachedAircrafts());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

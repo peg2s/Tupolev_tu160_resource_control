@@ -52,6 +52,7 @@ public class EngineersTabController {
     }
 
     void updateEngineersList() {
+        SavedData.readDataFromSave();
         if (SavedData.engineers.size() == 0) {
             listOfEngineers.setPlaceholder(new Label("Не введены данные об инженерах.\n" +
                     "Добавьте хотя бы одного человека."));
@@ -74,10 +75,9 @@ public class EngineersTabController {
                 Scene scene = new Scene(page);
                 dialogStage.setScene(scene);
                 PersonalEngineerPageController controller = loader.getController();
+                controller.setEngineersTabController(this);
                 controller.setEngineer(listOfEngineers.getSelectionModel().getSelectedItem());
                 dialogStage.show();
-                SavedData.readDataFromSave();
-                updateEngineersList();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

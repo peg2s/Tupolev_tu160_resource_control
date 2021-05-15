@@ -9,7 +9,7 @@
          xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
          fx:controller="controller.MainController" tabDragPolicy="REORDER">
 
-    <Tab fx:id="engineersTabButton" text="Инженерный состав">
+    <Tab fx:id="engineersTabButton" onSelectionChanged="#updateEngineerTab" text="Инженерный состав">
         <fx:include fx:id="engineersTab" source="engineersTab.fxml"/>
     </Tab>
 

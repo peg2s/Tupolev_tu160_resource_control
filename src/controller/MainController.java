@@ -14,8 +14,17 @@ public class MainController {
     AircraftTabController aircraftTabController;
 
     @FXML
+    EngineersTabController engineersTabController;
+
+    @FXML
     void updateAircraftTab() {
         aircraftTabController.initialize();
     }
+
+    @FXML
+    void updateEngineerTab() {
+        engineersTabController.updateEngineersList();
+    }
+
 
 }

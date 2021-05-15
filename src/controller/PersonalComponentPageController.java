@@ -59,6 +59,8 @@ public class PersonalComponentPageController {
     @Getter
     private Component createdComponent;
     private AircraftComponentsTabController controller;
+    private boolean isEditMode;
+    private int componentIdInSavedData;
 
     @FXML
     void initialize() {
@@ -77,7 +79,17 @@ public class PersonalComponentPageController {
         // заполним базовые значения полей
         componentType.getItems().addAll(FXCollections.observableList(new ArrayList<>(EnumSet.allOf(ComponentType.class))));
         componentAttachedTo.getItems().addAll(SavedData.aircraft);
-        createButton.setOnAction(e -> handleClickCreateButton());
+        createButton.setOnAction(e -> {
+            handleClickCreateButton();
+            controller.updateComponentsList();
+        });
+    }
+
+    public void prepareComponentToEdit(Component component) {
+        isEditMode = true;
+        componentIdInSavedData = SavedData.getComponentId(component);
+        this.createdComponent = component;
+        fillComponentInfo();
     }
 
     void createComponent() {
@@ -91,9 +103,14 @@ public class PersonalComponentPageController {
                         Integer.parseInt(mainChannelFireCount.getText()),
                         Integer.parseInt(reserveChannelFireCount.getText()),
                         flightTime,
+                        Integer.parseInt(rotationsCount.getText()),
                         componentAttachedTo.getSelectionModel().getSelectedItem().toString());
-                        SavedData.components.add(createdComponent);
-                        SavedData.saveCurrentStateData();
+                if (isEditMode) {
+                    SavedData.components.set(componentIdInSavedData, createdComponent);
+                } else {
+                    SavedData.components.add(createdComponent);
+                }
+                SavedData.saveCurrentStateData();
             }
         }
     }
@@ -106,7 +123,6 @@ public class PersonalComponentPageController {
             ((Stage) createButton.getScene().getWindow()).close();
         }
     }
-
 
     void setParentController(AircraftComponentsTabController controller) {
         this.controller = controller;
@@ -127,6 +143,25 @@ public class PersonalComponentPageController {
                     "Все поля должны быть заполнены!");
         }
         return isNotBlank;
+    }
+
+    void fillComponentInfo() {
+        if (createdComponent instanceof MKU) {
+            MKU mku = (MKU) createdComponent;
+            hoursOperTime.setText(String.valueOf(mku.getFlightOperatingTime() / 60));
+            minutesOperTime.setText(String.valueOf(mku.getFlightOperatingTime() % 60));
+            reserveChannelFireCount.setText(String.valueOf(mku.getStartsOnReserveChannel()));
+            mainChannelFireCount.setText(String.valueOf(mku.getStartsOnMainChannel()));
+            rotationsCount.setText(String.valueOf(mku.getRotationsCount()));
+            takeOffCount.setText(String.valueOf(mku.getCountOfLandings()));
+            componentAttachedTo.setValue(SavedData.aircraft.stream()
+                    .filter(a -> a.toString()
+                            .equals(((MKU) createdComponent)
+                                    .getAttachedToAircraft()))
+                    .findAny().get());
+            componentNumber.setText(String.valueOf(((MKU) createdComponent).getNumber()));
+            componentType.setValue(((MKU) createdComponent).getType());
+        }
     }
 
     void showWarning(String text) {
