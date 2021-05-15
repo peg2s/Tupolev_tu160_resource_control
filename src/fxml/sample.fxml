@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0"
+         prefWidth="900.0" rotateGraphic="true" style="-fx-border-color: silver;" tabClosingPolicy="UNAVAILABLE"
+         tabMaxHeight="40.0" tabMaxWidth="300.0" tabMinHeight="35.0" tabMinWidth="150.0"
+         xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="controller.MainController" tabDragPolicy="REORDER">
+
+    <Tab fx:id="engineersTabButton" text="Инженерный состав">
+        <fx:include fx:id="engineersTab" source="engineersTab.fxml"/>
+    </Tab>
+
+    <Tab fx:id="aircraftTabButton" onSelectionChanged="#updateAircraftTab" text="Список ВС" closable="true">
+        <fx:include fx:id="aircraftTab" source="aircraftTab.fxml"/>
+    </Tab>
+
+    <Tab fx:id="componentsTabButton" text="Список агрегатов" closable="true">
+        <fx:include fx:id="aircraftComponentsTab" source="aircraftComponentsTab.fxml"/>
+    </Tab>
+
+    <Tab fx:id="faqTabButton" text="Инструкция" closable="true">
+        <fx:include fx:id="faqTab" source="faqTab.fxml"/>
+    </Tab>
+
+</TabPane>

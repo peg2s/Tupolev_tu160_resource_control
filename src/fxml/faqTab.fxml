@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="848.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FaqTabController">
+                <Accordion layoutY="10.0" prefHeight="250.0" prefWidth="868.0" AnchorPane.leftAnchor="0.0"
+                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                    <panes>
+                        <TitledPane animated="false" style="-fx-font-weight: bold;" text="1. Введение">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"
+                                        snapToPixel="false">
+                                <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                </padding>
+                                <TextArea fx:id="introduction" cacheShape="false" centerShape="false" editable="false"
+                                          focusTraversable="false" layoutX="8.0" prefHeight="150.0" scaleShape="false"
+                                          wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0"
+                                          AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
+                                    <font>
+                                        <Font size="14.0"/>
+                                    </font>
+                                </TextArea>
+                            </AnchorPane>
+                        </TitledPane>
+                        <TitledPane animated="false" style="-fx-font-weight: bold;" text="2. Подготовка к работе">
+                            <AnchorPane minHeight="250.0" minWidth="0.0" prefHeight="250.0" prefWidth="200.0">
+                                <children>
+                                    <TextArea fx:id="prepairingToWork" cacheShape="false" centerShape="false"
+                                              editable="false" focusTraversable="false" layoutY="-20.0" minHeight="250.0"
+                                              prefHeight="250.0" scaleShape="false" wrapText="true"
+                                              AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0"
+                                              AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </TextArea>
+                                </children>
+                                <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                </padding>
+                            </AnchorPane>
+                        </TitledPane>
+                        <TitledPane animated="false" style="-fx-font-weight: bold;" text="3. Работа">
+                            <AnchorPane prefHeight="180.0" prefWidth="200.0">
+                                <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                </padding>
+                                <children>
+                                    <TextArea fx:id="workInstruction" cacheShape="false" centerShape="false"
+                                              focusTraversable="false" layoutX="7.0" layoutY="-2.0" prefHeight="161.0"
+                                              prefWidth="855.0" scaleShape="false" wrapText="true"
+                                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </TextArea>
+                                </children>
+                            </AnchorPane>
+                        </TitledPane>
+                        <TitledPane animated="false" style="-fx-font-weight: bold;" text="4. Загрузка и сохранение данных">
+                            <content>
+                                <AnchorPane prefHeight="180.0" prefWidth="200.0">
+                                    <padding>
+                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                    </padding>
+                                    <children>
+                                        <TextArea fx:id="saveAndLoadInstruction" cacheShape="false" centerShape="false"
+                                                  focusTraversable="false" layoutX="7.0" layoutY="-2.0" prefHeight="161.0"
+                                                  prefWidth="855.0" scaleShape="false" wrapText="true"
+                                                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <font>
+                                                <Font size="14.0"/>
+                                            </font>
+                                        </TextArea>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </TitledPane>
+                        <TitledPane animated="false" style="-fx-font-weight: bold;"
+                                    text="5. Обратная связь: пожелания, предложения, жалобы на жизнь">
+                            <content>
+                                <AnchorPane prefHeight="180.0" prefWidth="200.0">
+                                    <padding>
+                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                    </padding>
+                                    <children>
+                                        <TextArea fx:id="feedbackText" cacheShape="false" centerShape="false"
+                                                  focusTraversable="false" layoutX="7.0" layoutY="-2.0" prefHeight="161.0"
+                                                  prefWidth="855.0" scaleShape="false" wrapText="true"
+                                                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <font>
+                                                <Font size="14.0"/>
+                                            </font>
+                                        </TextArea>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+                <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="713.0" layoutY="393.0"
+                           AnchorPane.bottomAnchor="-58.0" AnchorPane.rightAnchor="-47.0">
+                    <Image url="@../images/question.png"/>
+                </ImageView>
+            </AnchorPane>

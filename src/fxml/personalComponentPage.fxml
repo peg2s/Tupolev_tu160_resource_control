@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="946.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PersonalComponentPageController">
+    <children>
+        <AnchorPane layoutY="-1.0" prefHeight="103.0" prefWidth="946.0" style="-fx-background-color: Silver;" AnchorPane.bottomAnchor="301.0" AnchorPane.topAnchor="-1.0">
+            <children>
+                <ChoiceBox fx:id="componentAttachedTo" layoutX="163.0" layoutY="67.0" prefHeight="25.0" prefWidth="512.0" />
+            <TextField fx:id="componentNumber" layoutX="163.0" layoutY="39.0" prefHeight="25.0" prefWidth="512.0" />
+            <ChoiceBox fx:id="componentType" layoutX="163.0" layoutY="10.0" prefHeight="25.0" prefWidth="512.0" />
+            </children>
+        </AnchorPane>
+        <Label layoutX="21.0" layoutY="12.0" text="Изделие:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="21.0" layoutY="38.0" text="№:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="21.0" layoutY="65.0" text="Установлено на:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="21.0" layoutY="159.0" text="Кол-во взлёт-посадок с момента изготовления:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="21.0" layoutY="198.0" text="Кол-во пусков по основному каналу:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="21.0" layoutY="237.0" text="Кол-во пусков по резервному каналу:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="21.0" layoutY="118.0" text="Кол-во часов налёта с момента изготовления:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="hoursOperTime" layoutX="419.0" layoutY="119.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="496.0" layoutY="118.0" text="ч.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="minutesOperTime" layoutX="514.0" layoutY="119.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="592.0" layoutY="118.0" text="мин.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="takeOffCount" layoutX="419.0" layoutY="160.0" prefHeight="25.0" prefWidth="75.0" />
+        <TextField fx:id="mainChannelFireCount" layoutX="419.0" layoutY="199.0" prefHeight="25.0" prefWidth="75.0" />
+        <TextField fx:id="reserveChannelFireCount" layoutX="419.0" layoutY="239.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="497.0" layoutY="159.0" text="взлёт-посадок.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="497.0" layoutY="198.0" text="пусков.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="497.0" layoutY="238.0" text="пусков.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="additionalOperTimeHours" disable="true" layoutX="698.0" layoutY="119.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="775.0" layoutY="119.0" text="ч.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="additionalOperTimeMinutes" disable="true" layoutX="792.0" layoutY="119.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="871.0" layoutY="119.0" text="мин.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="additionalTakeOffCount" disable="true" layoutX="698.0" layoutY="161.0" prefHeight="25.0" prefWidth="75.0" />
+        <TextField fx:id="additionalMainChannelFireCount" disable="true" layoutX="698.0" layoutY="200.0" prefHeight="25.0" prefWidth="75.0" />
+        <TextField fx:id="additionalReserveChannelFireCount" disable="true" layoutX="698.0" layoutY="240.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="777.0" layoutY="160.0" text="взлёт-посадок.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="777.0" layoutY="199.0" text="пусков.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="777.0" layoutY="239.0" text="пусков.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Line endX="4.00006103515625" endY="528.7929077148438" layoutX="671.0" layoutY="-126.0" startX="4.0" startY="229.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.topAnchor="102.5">
+
+        </Line>
+        <Label layoutX="541.0" layoutY="238.0" rotate="270.0" text="данные за последнюю смену">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="addLastOperationsButton" disable="true" layoutX="707.0" layoutY="332.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="198.0" text="Добавить к текущей наработке" textAlignment="CENTER" wrapText="true">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="createButton" layoutX="259.0" layoutY="332.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="198.0" text="Сохранить" textAlignment="CENTER" wrapText="true">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Label layoutX="21.0" layoutY="277.0" text="Кол-во поворотов изделия:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="rotationsCount" layoutX="419.0" layoutY="278.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="498.0" layoutY="277.0" text="поворотов.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="additionalRotationsCount" disable="true" layoutX="698.0" layoutY="278.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label layoutX="777.0" layoutY="277.0" text="поворотов.">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Line endX="-681.0" endY="218.0" layoutX="681.0" layoutY="-116.0" startX="265.00006103515625" startY="218.0" />
+    </children>
+</AnchorPane>
