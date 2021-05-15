@@ -40,6 +40,8 @@ public class AircraftComponentsTabController {
 
     @FXML
     void initialize() {
+        SavedData.readDataFromSave();
+        componentsList.getItems().addAll(SavedData.components);
         addComponentButton.setOnAction(e->openPersonalComponentPage());
         componentIdColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         componentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));

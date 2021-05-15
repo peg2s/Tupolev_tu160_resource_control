@@ -7,18 +7,18 @@ import data.SavedData;
 import data.enums.ComponentType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
 import javafx.stage.Stage;
 import lombok.Getter;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.function.UnaryOperator;
+
+import static utils.TextUtils.checkInputText;
+import static utils.TextUtils.createFormatter;
 
 public class PersonalComponentPageController {
 
@@ -82,16 +82,9 @@ public class PersonalComponentPageController {
 
     void createComponent() {
         if (componentType.getSelectionModel().getSelectedItem() == ComponentType.L029) {
-        // todo: отрисовка иной формы ввода для данного типа компонент
-        } else if (componentType.getSelectionModel().getSelectedItem() != null) {
-            if (StringUtils.isNotBlank(takeOffCount.getText())
-                    && StringUtils.isNotBlank(mainChannelFireCount.getText())
-                    && StringUtils.isNotBlank(reserveChannelFireCount.getText())
-                    && StringUtils.isNotBlank(hoursOperTime.getText())
-                    && StringUtils.isNotBlank(minutesOperTime.getText())
-                    && StringUtils.isNotBlank(takeOffCount.getText())
-                    && StringUtils.isNotBlank(rotationsCount.getText())
-                    && StringUtils.isNotBlank(componentNumber.getText())) {
+            // todo: отрисовка иной формы ввода для данного типа компонент
+        } else {
+            if (checkInputIsNotBlank()) {
                 int flightTime = Integer.parseInt(hoursOperTime.getText()) * 60 + Integer.parseInt(minutesOperTime.getText());
                 createdComponent = new MKU(Integer.parseInt(componentNumber.getText()),
                         Integer.parseInt(takeOffCount.getText()),
@@ -99,7 +92,8 @@ public class PersonalComponentPageController {
                         Integer.parseInt(reserveChannelFireCount.getText()),
                         flightTime,
                         componentAttachedTo.getSelectionModel().getSelectedItem().toString());
-
+                        SavedData.components.add(createdComponent);
+                        SavedData.saveCurrentStateData();
             }
         }
     }
@@ -113,19 +107,33 @@ public class PersonalComponentPageController {
         }
     }
 
-    TextFormatter<Integer> createFormatter() {
-        UnaryOperator<Change> integerFilter = change -> {
-            String newText = change.getControlNewText();
-            if (newText.matches("-?([1-9][0-9]*)?")) {
-                return change;
-            }
-            return null;
-        };
-        return new TextFormatter<Integer>(integerFilter);
-    }
 
     void setParentController(AircraftComponentsTabController controller) {
         this.controller = controller;
     }
 
+    boolean checkInputIsNotBlank() {
+        boolean isNotBlank = checkInputText(componentNumber.getText(),
+                hoursOperTime.getText(),
+                minutesOperTime.getText(),
+                takeOffCount.getText(),
+                mainChannelFireCount.getText(),
+                reserveChannelFireCount.getText(),
+                rotationsCount.getText())
+                && componentType.getSelectionModel().getSelectedItem() != null
+                && componentAttachedTo.getSelectionModel().getSelectedItem() != null;
+        if (!isNotBlank) {
+            showWarning("Проверьте заполнение полей! \n" +
+                    "Все поля должны быть заполнены!");
+        }
+        return isNotBlank;
+    }
+
+    void showWarning(String text) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Внимание!");
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
 }
