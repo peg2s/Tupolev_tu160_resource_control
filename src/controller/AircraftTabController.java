@@ -21,6 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
+import static utils.ServiceUtils.showWarning;
+import static utils.TextUtils.*;
+
 public class AircraftTabController {
 
     @FXML
@@ -53,6 +56,10 @@ public class AircraftTabController {
 
     @FXML
     void initialize() {
+        setRestrictionsToInputFields();
+        aircraftName.setPromptText("Имя самолёта");
+        regNumberField.setPromptText("Рег. номер (RF-*****)");
+        sideNumberField.setPromptText("б/н");
         reloadInfoOnTab();
         aircraftsList.setOnMouseClicked(this::handleClickOnAircraftList);
         sideNumberColumn.setCellValueFactory(new PropertyValueFactory<>("sideNumber"));
@@ -62,10 +69,8 @@ public class AircraftTabController {
     }
 
     void updateEngineersListOnAircraftTab() {
-        if (SavedData.engineers.size() > 0) {
             selectEngineerBox.getItems().clear();
             selectEngineerBox.getItems().addAll(FXCollections.observableList(SavedData.engineers));
-        }
     }
 
     void fillSelectedAircraftInfo() {
@@ -74,16 +79,15 @@ public class AircraftTabController {
             aircraftName.setText(selectedAircraft.getName());
             sideNumberField.setText(selectedAircraft.getSideNumber());
             regNumberField.setText(selectedAircraft.getRegNumber());
+            selectEngineerBox.getSelectionModel()
+                    .select(SavedData.getEngineerFromList(
+                            selectedAircraft.getEngineer()));
         }
     }
 
     @FXML
     void addAircraft() {
-        if (StringUtils.isNotBlank(sideNumberField.getCharacters())
-                && StringUtils.isNotBlank(regNumberField.getCharacters())
-                && StringUtils.isNotBlank(aircraftName.getCharacters())
-                && selectEngineerBox.getSelectionModel().getSelectedItem() != null) {
-
+        if (checkInputFields()) {
             Aircraft aircraft = Aircraft.builder()
                     .name(aircraftName.getText())
                     .regNumber(regNumberField.getText())
@@ -96,6 +100,8 @@ public class AircraftTabController {
             aircraftsList.getItems().addAll(aircraft);
             SavedData.aircraft.add(aircraft);
             SavedData.saveCurrentStateData();
+        } else {
+            showWarning("Проверьте, что все поля заполнены.");
         }
     }
 
@@ -173,6 +179,19 @@ public class AircraftTabController {
         dialogStage.show();
         SavedData.readDataFromSave();
         personalAircraftPageController = controller;
+    }
+
+    private boolean checkInputFields() {
+       return checkInputText(regNumberField.getText(),
+                sideNumberField.getText(),
+                aircraftName.getText())
+                && selectEngineerBox.getSelectionModel().getSelectedItem() != null;
+    }
+
+    private void setRestrictionsToInputFields() {
+        sideNumberField.setTextFormatter(createFormatterForOnlyDigits(2));
+        aircraftName.setTextFormatter(createFormatterForOnlyText("^(?i)[А-Я,а-я? ]{0,40}$"));
+        regNumberField.setTextFormatter(createFormatterForOnlyText("^(?i)rf?-?[0-9]{0,7}"));
     }
 }
 

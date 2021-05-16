@@ -7,7 +7,10 @@ import data.SavedData;
 import data.enums.ComponentType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.GaussianBlur;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -17,8 +20,9 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
+import static utils.ServiceUtils.showWarning;
 import static utils.TextUtils.checkInputText;
-import static utils.TextUtils.createFormatter;
+import static utils.TextUtils.createFormatterForOnlyDigits;
 
 public class PersonalComponentPageController {
 
@@ -73,13 +77,13 @@ public class PersonalComponentPageController {
     void initialize() {
         isUnmounted.setOnAction(e -> handleUnmountCheckboxSelected());
         // установим ограничение на ввод данных: только цифры
-        hoursOperTime.setTextFormatter(createFormatter());
-        minutesOperTime.setTextFormatter(createFormatter());
-        componentNumber.setTextFormatter(createFormatter());
-        rotationsCount.setTextFormatter(createFormatter());
-        mainChannelFireCount.setTextFormatter(createFormatter());
-        reserveChannelFireCount.setTextFormatter(createFormatter());
-        takeOffCount.setTextFormatter(createFormatter());
+        hoursOperTime.setTextFormatter(createFormatterForOnlyDigits(3));
+        minutesOperTime.setTextFormatter(createFormatterForOnlyDigits(2));
+        componentNumber.setTextFormatter(createFormatterForOnlyDigits(30));
+        rotationsCount.setTextFormatter(createFormatterForOnlyDigits(2));
+        mainChannelFireCount.setTextFormatter(createFormatterForOnlyDigits(3));
+        reserveChannelFireCount.setTextFormatter(createFormatterForOnlyDigits(3));
+        takeOffCount.setTextFormatter(createFormatterForOnlyDigits(4));
 
         // подгрузим в ОЗУ последние данные из сохранений
         SavedData.readDataFromSave();
@@ -91,6 +95,7 @@ public class PersonalComponentPageController {
             handleClickCreateButton();
             controller.updateComponentsList();
         });
+        addLastOperationsButton.setOnAction(e -> addLastFlightInfo());
     }
 
     public void prepareComponentToEdit(Component component) {
@@ -182,14 +187,6 @@ public class PersonalComponentPageController {
         }
     }
 
-    void showWarning(String text) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Внимание!");
-        alert.setHeaderText(null);
-        alert.setContentText(text);
-        alert.showAndWait();
-    }
-
     public void setAdditionalFieldsDisabled(boolean isDisabled) {
         additionalMainChannelFireCount.setDisable(isDisabled);
         additionalOperTimeHours.setDisable(isDisabled);
@@ -198,6 +195,51 @@ public class PersonalComponentPageController {
         additionalRotationsCount.setDisable(isDisabled);
         additionalTakeOffCount.setDisable(isDisabled);
         additionalReserveChannelFireCount.setDisable(isDisabled);
+        addLastOperationsButton.setDisable(isDisabled);
+    }
+
+    private void addLastFlightInfo() {
+        if (createdComponent instanceof MPU_MKU) {
+            int id = SavedData.getComponentId(createdComponent);
+            if (checkInputText(additionalOperTimeHours.getText(),
+                    additionalOperTimeMinutes.getText(),
+                    additionalTakeOffCount.getText(),
+                    additionalRotationsCount.getText(),
+                    additionalMainChannelFireCount.getText(),
+                    additionalOperTimeMinutes.getText())) {
+                SavedData.components
+                        .stream()
+                        .filter(c -> c.equals(createdComponent))
+                        .forEach((c ->
+                        {
+                            ((MPU_MKU) c).setCountOfLandings(
+                                    ((MPU_MKU) c).getCountOfLandings()
+                                            + Integer.parseInt(additionalTakeOffCount.getText()));
+                            ((MPU_MKU) c).setRotationsCount(
+                                    ((MPU_MKU) c).getRotationsCount()
+                                            + Integer.parseInt(additionalRotationsCount.getText()));
+                            ((MPU_MKU) c).setStartsOnMainChannel(
+                                    ((MPU_MKU) c).getStartsOnMainChannel()
+                                            + Integer.parseInt(additionalMainChannelFireCount.getText()));
+                            ((MPU_MKU) c).setStartsOnReserveChannel(
+                                    ((MPU_MKU) c).getStartsOnReserveChannel()
+                                            + Integer.parseInt(additionalReserveChannelFireCount.getText()));
+                            ((MPU_MKU) c).setFlightOperatingTime(
+                                    ((MPU_MKU) c).getFlightOperatingTime()
+                                            + Integer.parseInt(additionalOperTimeMinutes.getText()) +
+                                            Integer.parseInt(additionalOperTimeHours.getText()) * 60);
+
+                        }));
+                SavedData.saveCurrentStateData();
+                controller.updateComponentsList();
+                createdComponent = SavedData.components.get(id);
+                fillComponentInfo();
+                resetAdditionalFieldAfterAdd();
+                showWarning("Наработка успешно добавлена.");
+            } else {
+                showWarning("Проверьте, что все поля заполнены. \nЕсли изменений не было, введите в это поле 0.");
+            }
+        }
     }
 
     private void handleUnmountCheckboxSelected() {
@@ -213,6 +255,15 @@ public class PersonalComponentPageController {
             componentAttachedTo.setEffect(null);
             isUnmountedFromAircraft = false;
         }
+    }
+
+    private void resetAdditionalFieldAfterAdd() {
+        additionalRotationsCount.setText("");
+        additionalOperTimeMinutes.setText("");
+        additionalTakeOffCount.setText("");
+        additionalOperTimeHours.setText("");
+        additionalReserveChannelFireCount.setText("");
+        additionalMainChannelFireCount.setText("");
     }
 
     private MPU_MKU createMPU_MKU(ComponentType type) {

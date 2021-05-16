@@ -8,25 +8,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="848.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="controller.AircraftTabController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AircraftTabController">
     <children>
-        <HBox alignment="CENTER" prefHeight="54.0" prefWidth="868.0" spacing="5.0" AnchorPane.bottomAnchor="77.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <HBox alignment="CENTER" layoutY="428.0" prefHeight="54.0" prefWidth="868.0" spacing="5.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <TextField fx:id="sideNumberField" alignment="CENTER" prefHeight="25.0" prefWidth="91.0" text="б/н" />
-                <TextField fx:id="regNumberField" alignment="CENTER" text="рег.номер" />
-                <TextField fx:id="aircraftName" alignment="CENTER" prefHeight="25.0" prefWidth="291.0" text="имя самолёта" />
+                <TextField fx:id="sideNumberField" alignment="CENTER" prefHeight="25.0" prefWidth="91.0" />
+                <TextField fx:id="regNumberField" alignment="CENTER" />
+                <TextField fx:id="aircraftName" alignment="CENTER" prefHeight="25.0" prefWidth="291.0" />
                 <ChoiceBox fx:id="selectEngineerBox" prefHeight="25.0" prefWidth="227.0" />
             </children>
         </HBox>
-        <AnchorPane prefHeight="52.0" prefWidth="868.0" style="-fx-background-color: silver;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="580.0" spacing="30.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
+        <AnchorPane layoutY="488.0" prefHeight="60.0" prefWidth="848.0" style="-fx-background-color: silver;" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="480.0" />
+        <HBox alignment="CENTER" layoutX="131.0" layoutY="487.0" prefHeight="46.0" prefWidth="574.0" spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="143.0">
             <children>
-                <Button fx:id="addAircraftButton" mnemonicParsing="false" onAction="#addAircraft" style="-fx-font-weight: bold;" text="Добавить самолёт" />
-                <Button fx:id="deleteAircraftButton" mnemonicParsing="false" onAction="#deleteAircraft" style="-fx-font-weight: bold;" text="Удалить самолёт" />
-                <Button fx:id="editAircraftButton" mnemonicParsing="false" onAction="#editAircraft" style="-fx-font-weight: bold;" text="Изменить запись" />
+                <Button fx:id="addAircraftButton" minHeight="30.0" minWidth="170.0" mnemonicParsing="false" onAction="#addAircraft" style="-fx-font-weight: bold;" text="Добавить самолёт" />
+                <Button fx:id="deleteAircraftButton" minHeight="30.0" minWidth="170.0" mnemonicParsing="false" onAction="#deleteAircraft" style="-fx-font-weight: bold;" text="Удалить самолёт" />
+                <Button fx:id="editAircraftButton" minHeight="30.0" minWidth="170.0" mnemonicParsing="false" onAction="#editAircraft" style="-fx-font-weight: bold;" text="Изменить запись" />
             </children>
         </HBox>
-        <TableView fx:id="aircraftsList" prefHeight="403.0" prefWidth="868.0" AnchorPane.bottomAnchor="131.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+        <TableView fx:id="aircraftsList" prefHeight="416.0" prefWidth="848.0" AnchorPane.bottomAnchor="131.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
             <columns>
                 <TableColumn fx:id="sideNumberColumn" maxWidth="500.0" minWidth="100.0" prefWidth="150.0" text="б/н" />
                 <TableColumn fx:id="regNumberColumn" maxWidth="500.0" minWidth="100.0" prefWidth="165.0" text="рег. номер" />

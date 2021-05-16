@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import utils.TextUtils;
 
 import java.util.stream.Collectors;
 
@@ -59,9 +60,8 @@ public class PersonalAircraftPageController {
     void initialize() {
         aircraftAttachedTo.getItems().addAll(SavedData.engineers.stream().map(e -> e.toString()).collect(Collectors.toList()));
         unattachSelectedComponent.setOnAction(e -> unattachComponent());
-        createNewComponent.setOnAction(e -> {
-            openPersonalComponentPage();
-        });
+        createNewComponent.setOnAction(e -> openPersonalComponentPage());
+        saveChanges.setOnAction(e -> handleSaveChangesButton());
     }
 
     private void unattachComponent() {
@@ -91,4 +91,21 @@ public class PersonalAircraftPageController {
                 .map(Component::toString)
                 .collect(Collectors.toList()));
     }
+
+    private void handleSaveChangesButton() {
+        if (TextUtils.checkInputText(aircraftNumber.getText(),
+                aircraftName.getText(),
+                aircraftRegNumber.getText())
+                && aircraftAttachedTo.getSelectionModel().getSelectedItem() != null) {
+            SavedData.aircraft.stream().filter(a -> a.equals(aircraft)).forEach(a -> {
+                a.setEngineer(aircraftAttachedTo.getSelectionModel().getSelectedItem());
+                a.setName(aircraftName.getText());
+                a.setRegNumber(aircraftRegNumber.getText());
+                a.setSideNumber(aircraftNumber.getText());
+            });
+            SavedData.saveCurrentStateData();
+            aircraftTabController.updateAircraftsList();
+        }
+    }
+
 }

@@ -26,6 +26,7 @@ public class MainController {
     @FXML
     void updateAircraftTab() {
         aircraftTabController.updateAircraftsList();
+        aircraftTabController.updateEngineersListOnAircraftTab();
     }
 
     @FXML

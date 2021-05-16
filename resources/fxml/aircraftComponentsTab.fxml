@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="603.0" prefWidth="985.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="controller.AircraftComponentsTabController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="603.0" prefWidth="985.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AircraftComponentsTabController">
 <children>
-                    <TableView fx:id="componentsList" prefHeight="507.0" prefWidth="985.0" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+                    <TableView fx:id="componentsList" prefHeight="509.0" prefWidth="985.0" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
                         <columns>
                             <TableColumn fx:id="componentIdColumn" minWidth="50.0" prefWidth="82.0" text="номер" />
                             <TableColumn fx:id="componentTypeColumn" minWidth="50.0" prefWidth="206.0" text="тип агрегата" />
@@ -18,11 +18,11 @@
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                         </columnResizePolicy>
                     </TableView>
-                    <AnchorPane layoutX="14.0" layoutY="455.0" prefHeight="48.0" prefWidth="866.0" style="-fx-background-color: silver;" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                    <HBox alignment="CENTER" layoutX="178.0" layoutY="459.0" prefHeight="40.0" prefWidth="476.0" spacing="30.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+                    <AnchorPane layoutX="14.0" layoutY="522.0" prefHeight="68.0" prefWidth="985.0" style="-fx-background-color: silver;" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="480.0" />
+                    <HBox alignment="CENTER" layoutX="178.0" layoutY="480.0" prefHeight="110.0" prefWidth="585.0" spacing="15.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="480.0">
                         <children>
-                            <Button fx:id="addComponentButton" minWidth="150.0" mnemonicParsing="false" prefWidth="200.0" style="-fx-font-weight: bold;" text="Добавить запись" />
-                            <Button fx:id="deleteComponentButton" minWidth="150.0" mnemonicParsing="false" prefWidth="200.0" style="-fx-font-weight: bold;" text="Удалить запись" />
+                            <Button fx:id="addComponentButton" minHeight="30.0" minWidth="170.0" mnemonicParsing="false" style="-fx-font-weight: bold;" text="Добавить запись" />
+                            <Button fx:id="deleteComponentButton" minHeight="30.0" minWidth="170.0" mnemonicParsing="false" style="-fx-font-weight: bold;" text="Удалить запись" />
                         </children>
                     </HBox>
                 </children>

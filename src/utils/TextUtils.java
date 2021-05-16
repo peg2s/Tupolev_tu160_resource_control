@@ -7,15 +7,26 @@ import java.util.function.UnaryOperator;
 
 public class TextUtils {
 
-    public static TextFormatter<Integer> createFormatter() {
+    public static TextFormatter<Integer> createFormatterForOnlyDigits(int maxLength) {
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String newText = change.getControlNewText();
-            if (newText.matches("-?([1-9][0-9]*)?")) {
+            if (newText.matches("^[0-9]{0," + maxLength + "}$")) {
                 return change;
             }
             return null;
         };
         return new TextFormatter<>(integerFilter);
+    }
+
+    public static TextFormatter<String> createFormatterForOnlyText(String regexp) {
+        UnaryOperator<TextFormatter.Change> textFilter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches(regexp)) {
+                return change;
+            }
+            return null;
+        };
+        return new TextFormatter<>(textFilter);
     }
 
     public static boolean checkInputText(String ... text) {

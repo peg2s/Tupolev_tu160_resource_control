@@ -56,6 +56,7 @@ public class AircraftComponentsTabController {
             }
         });
         addComponentButton.setOnAction(e -> openPersonalComponentPage(this));
+        deleteComponentButton.setOnAction(e->deleteSelectedComponent());
         componentIdColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         componentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         componentAttachedToColumn.setCellValueFactory(new PropertyValueFactory<>("attachedToAircraft"));
@@ -83,6 +84,16 @@ public class AircraftComponentsTabController {
         dialogStage.show();
         SavedData.readDataFromSave();
         return controller;
+    }
+
+    private void deleteSelectedComponent() {
+        Component component = componentsList.getSelectionModel().getSelectedItem();
+        SavedData.aircraft.stream()
+                .filter(a->a.getComponents().contains(component.toString()))
+                .forEach(a->a.getComponents().remove(component.toString()));
+        SavedData.components.remove(component);
+        componentsList.getItems().remove(component);
+        SavedData.saveCurrentStateData();
     }
 
     void updateComponentsList() {
