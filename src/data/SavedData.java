@@ -40,4 +40,8 @@ public class SavedData {
         }
         return 0;
     }
+
+    public static Aircraft getAircraft(String selectedAircraft) {
+        return aircraft.stream().filter(a -> a.toString().equals(selectedAircraft)).findAny().get();
+    }
 }

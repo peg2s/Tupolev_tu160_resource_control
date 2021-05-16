@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -15,6 +16,11 @@
                 <ChoiceBox fx:id="componentAttachedTo" layoutX="163.0" layoutY="67.0" prefHeight="25.0" prefWidth="512.0" />
             <TextField fx:id="componentNumber" layoutX="163.0" layoutY="39.0" prefHeight="25.0" prefWidth="512.0" />
             <ChoiceBox fx:id="componentType" layoutX="163.0" layoutY="10.0" prefHeight="25.0" prefWidth="512.0" />
+            <CheckBox fx:id="isUnmounted" layoutX="701.0" layoutY="67.0" mnemonicParsing="false" text="Снято с ВС. На хранении.">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </CheckBox>
             </children>
         </AnchorPane>
         <Label layoutX="21.0" layoutY="12.0" text="Изделие:">

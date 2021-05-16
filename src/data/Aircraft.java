@@ -16,7 +16,7 @@ public class Aircraft {
     private String sideNumber;
     @NonNull
     private String name;
-    private ArrayList<Component> components;
+    private ArrayList<String> components;
     @NonNull
     private String engineer;
 

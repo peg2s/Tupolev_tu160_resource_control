@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 public class AircraftComponentsTabController {
@@ -37,19 +38,24 @@ public class AircraftComponentsTabController {
     @FXML
     private Button deleteComponentButton;
 
+    @FXML
+    @Setter
+    private MainController mainController;
+
     private Component selectedComponent;
 
     @FXML
     void initialize() {
         SavedData.readDataFromSave();
         componentsList.getItems().addAll(SavedData.components);
-        componentsList.setOnMouseClicked(e-> {
+        componentsList.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-               PersonalComponentPageController personalComponentPageController = openPersonalComponentPage();
+                PersonalComponentPageController personalComponentPageController = openPersonalComponentPage(this);
                 personalComponentPageController.prepareComponentToEdit(componentsList.getSelectionModel().getSelectedItem());
+                personalComponentPageController.setAdditionalFieldsDisabled(false);
             }
         });
-        addComponentButton.setOnAction(e->openPersonalComponentPage());
+        addComponentButton.setOnAction(e -> openPersonalComponentPage(this));
         componentIdColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         componentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         componentAttachedToColumn.setCellValueFactory(new PropertyValueFactory<>("attachedToAircraft"));
@@ -64,18 +70,19 @@ public class AircraftComponentsTabController {
 
     @FXML
     @SneakyThrows
-    PersonalComponentPageController openPersonalComponentPage() {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/personalComponentPage.fxml"));
-            AnchorPane page = loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-            PersonalComponentPageController controller = loader.getController();
-            controller.setParentController(this);
-            dialogStage.show();
-            SavedData.readDataFromSave();
-            return controller;
+    public PersonalComponentPageController openPersonalComponentPage(AircraftComponentsTabController aircraftComponentsTabController) {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/personalComponentPage.fxml"));
+        AnchorPane page = loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(page);
+        dialogStage.setScene(scene);
+        PersonalComponentPageController controller = loader.getController();
+        controller.setParentController(aircraftComponentsTabController);
+        controller.setMainController(mainController);
+        dialogStage.show();
+        SavedData.readDataFromSave();
+        return controller;
     }
 
     void updateComponentsList() {

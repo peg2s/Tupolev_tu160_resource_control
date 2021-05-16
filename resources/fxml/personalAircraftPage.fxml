@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="441.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PersonalAircraftPageController">
+    <children>
+        <Label layoutX="26.0" layoutY="26.0" text="ВС №: ">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="26.0" layoutY="54.0" text="Имя:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="26.0" layoutY="83.0" text="Рег. номер">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="26.0" layoutY="112.0" text="Закреплён за:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <TextField fx:id="aircraftNumber" layoutX="127.0" layoutY="23.0" prefHeight="25.0" prefWidth="453.0" />
+        <TextField fx:id="aircraftName" layoutX="127.0" layoutY="51.0" prefHeight="25.0" prefWidth="453.0" />
+        <TextField fx:id="aircraftRegNumber" layoutX="127.0" layoutY="80.0" prefHeight="25.0" prefWidth="453.0" />
+        <ChoiceBox fx:id="aircraftAttachedTo" layoutX="127.0" layoutY="109.0" prefHeight="25.0" prefWidth="453.0" />
+        <ListView fx:id="componentsOnAircraft" layoutX="15.0" layoutY="165.0" prefHeight="225.0" prefWidth="572.0" />
+        <Label layoutX="155.0" layoutY="142.0" text="На самолёт установлены следующие агрегаты:" />
+        <Button fx:id="createNewComponent" layoutX="15.0" layoutY="402.0" mnemonicParsing="false" text="Создать новый агрегат" />
+        <Button fx:id="unattachSelectedComponent" layoutX="166.0" layoutY="402.0" mnemonicParsing="false" text="Открепить агрегат" />
+      <Button fx:id="saveChanges" layoutX="448.0" layoutY="402.0" mnemonicParsing="false" text="Сохранить изменения" />
+    </children>
+</AnchorPane>

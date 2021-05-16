@@ -17,7 +17,7 @@
         <fx:include fx:id="aircraftTab" source="aircraftTab.fxml"/>
     </Tab>
 
-    <Tab fx:id="componentsTabButton" text="Список агрегатов" closable="true">
+    <Tab fx:id="componentsTabButton" onSelectionChanged="#updateComponentsTab" text="Список агрегатов" closable="true">
         <fx:include fx:id="aircraftComponentsTab" source="aircraftComponentsTab.fxml"/>
     </Tab>
 

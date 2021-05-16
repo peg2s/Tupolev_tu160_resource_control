@@ -3,16 +3,30 @@ package controller;
 import data.Aircraft;
 import data.Engineer;
 import data.SavedData;
+import gui.Main;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
 
 public class AircraftTabController {
 
+    @FXML
+    @Getter
+    @Setter
+    MainController mainController;
     @FXML
     @Getter
     @Setter
@@ -33,13 +47,14 @@ public class AircraftTabController {
     private TableColumn<Engineer, Engineer> engineerOfAircraftName;
     @FXML
     private TableColumn<String, String> aircraftNameColumn;
-
+    @Getter
+    private PersonalAircraftPageController personalAircraftPageController;
     private Aircraft selectedAircraft;
 
     @FXML
     void initialize() {
         reloadInfoOnTab();
-        aircraftsList.setOnMouseClicked(e -> fillSelectedAircraftInfo());
+        aircraftsList.setOnMouseClicked(this::handleClickOnAircraftList);
         sideNumberColumn.setCellValueFactory(new PropertyValueFactory<>("sideNumber"));
         regNumberColumn.setCellValueFactory(new PropertyValueFactory<>("regNumber"));
         aircraftNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -74,6 +89,7 @@ public class AircraftTabController {
                     .regNumber(regNumberField.getText())
                     .sideNumber(sideNumberField.getText())
                     .engineer(selectEngineerBox.getSelectionModel().getSelectedItem().toString())
+                    .components(new ArrayList<>())
                     .build();
             selectEngineerBox.getSelectionModel().getSelectedItem().getAttachedAircrafts().add(aircraft);
             SavedData.engineers = selectEngineerBox.getItems();
@@ -133,6 +149,30 @@ public class AircraftTabController {
         }
         aircraftsList.getItems().clear();
         aircraftsList.getItems().addAll(SavedData.aircraft);
+    }
+
+    void handleClickOnAircraftList(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            openPersonalAircraftPage();
+        }
+        fillSelectedAircraftInfo();
+    }
+
+    @FXML
+    @SneakyThrows
+    void openPersonalAircraftPage() {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/personalAircraftPage.fxml"));
+        AnchorPane page = loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(page);
+        dialogStage.setScene(scene);
+        PersonalAircraftPageController controller = loader.getController();
+        controller.setAircraftTabController(this);
+        controller.setAircraft(aircraftsList.getSelectionModel().getSelectedItem());
+        dialogStage.show();
+        SavedData.readDataFromSave();
+        personalAircraftPageController = controller;
     }
 }
 
