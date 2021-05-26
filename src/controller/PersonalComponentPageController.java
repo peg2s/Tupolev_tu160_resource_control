@@ -16,10 +16,12 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
+import static utils.ServiceUtils.checkComponentsOnAircraft;
 import static utils.ServiceUtils.showWarning;
 import static utils.TextUtils.checkInputText;
 import static utils.TextUtils.createFormatterForOnlyDigits;
@@ -65,12 +67,13 @@ public class PersonalComponentPageController {
     @FXML
     @Setter
     private MainController mainController;
-    private boolean isUnmountedFromAircraft;
     @Getter
     private Component createdComponent;
+    private boolean isUnmountedFromAircraft;
     private Component selectedComponent;
     private AircraftComponentsTabController controller;
     private boolean isEditMode;
+    private boolean isAvailableToAdd;
     private int componentIdInSavedData;
 
     @FXML
@@ -112,22 +115,29 @@ public class PersonalComponentPageController {
         } else {
             if (checkInputIsNotBlank()) {
                 createdComponent = createMPU_MKU(componentType.getValue());
-                if (isEditMode) {
-                    MPU_MKU componentInSave = (MPU_MKU) SavedData.components.get(componentIdInSavedData);
-                    if (!componentInSave.equals(createdComponent.getAttachedToAircraft())) {
-                        SavedData.aircraft.stream().filter(a -> a.toString().equals((componentInSave).getAttachedToAircraft())).forEach(a ->
-                                a.getComponents().remove(selectedComponent.toString())
-                        );
-                        SavedData.aircraft.stream().filter(a -> a.toString().equals(createdComponent.getAttachedToAircraft())).forEach(a ->
-                                a.getComponents().add(createdComponent.toString())
-                        );
+                isAvailableToAdd = checkComponentsOnAircraft(
+                        SavedData.getAircraft(createdComponent.getAttachedToAircraft()),
+                        createdComponent);
+                if (isAvailableToAdd) {
+                    if (isEditMode) {
+                        MPU_MKU componentInSave = (MPU_MKU) SavedData.components.get(componentIdInSavedData);
+                        if (!componentInSave.equals(createdComponent.getAttachedToAircraft())) {
+                            SavedData.aircraft.stream().filter(a -> a.toString().equals(
+                                    (componentInSave).getAttachedToAircraft()))
+                                    .forEach(a -> a.getComponents().remove(selectedComponent.toString())
+                                    );
+                            SavedData.aircraft.stream().filter(a -> a.toString().equals(
+                                    createdComponent.getAttachedToAircraft()))
+                                    .forEach(a -> a.getComponents().add(createdComponent.toString())
+                                    );
+                        }
+                        SavedData.components.set(componentIdInSavedData, createdComponent);
+                    } else {
+                        SavedData.getAircraft(componentAttachedTo.getValue()).getComponents().add(createdComponent.toString());
+                        SavedData.components.add(createdComponent);
                     }
-                    SavedData.components.set(componentIdInSavedData, createdComponent);
-                } else {
-                    SavedData.getAircraft(componentAttachedTo.getValue()).getComponents().add(createdComponent.toString());
-                    SavedData.components.add(createdComponent);
+                    SavedData.saveCurrentStateData();
                 }
-                SavedData.saveCurrentStateData();
             }
         }
     }
@@ -135,7 +145,7 @@ public class PersonalComponentPageController {
     @FXML
     public void handleClickCreateButton() {
         createComponent();
-        if (createdComponent != null) {
+        if (createdComponent != null && isAvailableToAdd) {
             controller.setSelectedComponent(createdComponent);
         }
         if (checkInputIsNotBlank()) {
@@ -279,7 +289,7 @@ public class PersonalComponentPageController {
                 attachedTo,
                 isUnmountedFromAircraft,
                 type,
-                Integer.parseInt(componentNumber.getText()),
+                new BigDecimal(componentNumber.getText()),
                 Integer.parseInt(takeOffCount.getText()),
                 Integer.parseInt(mainChannelFireCount.getText()),
                 Integer.parseInt(reserveChannelFireCount.getText()),

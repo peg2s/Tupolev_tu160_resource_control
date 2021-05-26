@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(name = "MKU", value = MPU_MKU.class),
@@ -19,5 +21,5 @@ public class Component {
     private String attachedToAircraft;
     private boolean isUnmounted;
     private ComponentType type;
-    private int number;
+    private BigDecimal number;
 }

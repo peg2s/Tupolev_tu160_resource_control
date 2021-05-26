@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import data.enums.ComponentType;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Data
@@ -15,7 +16,7 @@ public class MPU_MKU extends Component {
     private int flightOperatingTime;
     private int rotationsCount;
 
-    public MPU_MKU(String attachedToAircraft, boolean isUnmounted, ComponentType type, int number, int countOfLandings, int startsOnMainChannel, int startsOnReserveChannel, int flightOperatingTime, int rotationsCount) {
+    public MPU_MKU(String attachedToAircraft, boolean isUnmounted, ComponentType type, BigDecimal number, int countOfLandings, int startsOnMainChannel, int startsOnReserveChannel, int flightOperatingTime, int rotationsCount) {
         super(attachedToAircraft, isUnmounted, type, number);
         this.countOfLandings = countOfLandings;
         this.startsOnMainChannel = startsOnMainChannel;
@@ -39,7 +40,7 @@ public class MPU_MKU extends Component {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MPU_MKU mpu_mku = (MPU_MKU) o;
-        return super.getNumber() == mpu_mku.getNumber()
+        return super.getNumber().equals(mpu_mku.getNumber())
                 && countOfLandings == mpu_mku.countOfLandings
                 && startsOnMainChannel == mpu_mku.startsOnMainChannel
                 && startsOnReserveChannel == mpu_mku.startsOnReserveChannel
