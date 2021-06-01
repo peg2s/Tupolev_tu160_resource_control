@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(name = "MKU", value = MPU_MKU.class),
-        @JsonSubTypes.Type(name = "MPU", value = MPU_MKU.class)
+        @JsonSubTypes.Type(name = "MPU", value = MPU_MKU.class),
+        @JsonSubTypes.Type(name = "L029", value = L029.class)
 })
 @Data
 @AllArgsConstructor

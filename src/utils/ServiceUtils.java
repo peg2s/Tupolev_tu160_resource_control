@@ -33,8 +33,9 @@ public class ServiceUtils {
             return false;
         }
         List<String> componentsOnAircrat = aircraft.getComponents();
-        int mpuCount = componentsOnAircrat.stream().filter(c -> c.contains(ComponentType.MPU.getName())).collect(Collectors.toList()).size();
-        int mkuCount = componentsOnAircrat.stream().filter(c -> c.contains(ComponentType.MKU.getName())).collect(Collectors.toList()).size();
+        int mpuCount = (int) componentsOnAircrat.stream().filter(c -> c.contains(ComponentType.MPU.getName())).count();
+        int mkuCount = (int) componentsOnAircrat.stream().filter(c -> c.contains(ComponentType.MKU.getName())).count();
+        int l029Count = (int) componentsOnAircrat.stream().filter(c -> c.contains(ComponentType.L029.getName())).count();
         ComponentType type = component.getType();
         if (componentsOnAircrat.size() == 0) {
             return true;
@@ -43,7 +44,8 @@ public class ServiceUtils {
             showWarning("Запрещена одновременная установка изд. 9А-829К2 и 9А-829К3");
             return false;
         } else if ((type == ComponentType.MKU && mkuCount == 2)
-                || (type == ComponentType.MPU && mpuCount == 2)) {
+                || (type == ComponentType.MPU && mpuCount == 2)
+                || (type == ComponentType.L029 && l029Count == 3)) {
             showWarning("На ВС уже установлено максимально допустимое кол-во изд." + type.getName());
             return false;
         }

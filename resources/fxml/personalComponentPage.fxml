@@ -118,6 +118,27 @@
                 <Font size="18.0" />
             </font>
         </Label>
+      <AnchorPane fx:id="specificForMkuMpuPane" layoutX="21.0" layoutY="277.0">
+         <children>
+              <Label text="Кол-во поворотов изделия:">
+                  <font>
+                      <Font size="18.0" />
+                  </font>
+              </Label>
+              <TextField fx:id="rotationsCount" layoutX="398.0" layoutY="1.0" prefHeight="25.0" prefWidth="75.0" />
+              <Label layoutX="477.0" text="поворотов.">
+                  <font>
+                      <Font size="18.0" />
+                  </font>
+              </Label>
+              <TextField fx:id="additionalRotationsCount" disable="true" layoutX="677.0" layoutY="1.0" prefHeight="25.0" prefWidth="75.0" />
+              <Label layoutX="756.0" text="поворотов.">
+                  <font>
+                      <Font size="18.0" />
+                  </font>
+              </Label>
+         </children>
+      </AnchorPane>
         <Line endX="4.00006103515625" endY="528.7929077148438" layoutX="671.0" layoutY="-126.0" startX="4.0" startY="229.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.topAnchor="102.5">
 
         </Line>
@@ -136,23 +157,6 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <Label layoutX="21.0" layoutY="277.0" text="Кол-во поворотов изделия:">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Label>
-        <TextField fx:id="rotationsCount" layoutX="419.0" layoutY="278.0" prefHeight="25.0" prefWidth="75.0" />
-        <Label layoutX="498.0" layoutY="277.0" text="поворотов.">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Label>
-        <TextField fx:id="additionalRotationsCount" disable="true" layoutX="698.0" layoutY="278.0" prefHeight="25.0" prefWidth="75.0" />
-        <Label layoutX="777.0" layoutY="277.0" text="поворотов.">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Label>
         <Line endX="-681.0" endY="218.0" layoutX="681.0" layoutY="-116.0" startX="265.00006103515625" startY="218.0" />
     </children>
 </AnchorPane>

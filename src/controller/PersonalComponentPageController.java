@@ -1,9 +1,6 @@
 package controller;
 
-import data.Aircraft;
-import data.Component;
-import data.MPU_MKU;
-import data.SavedData;
+import data.*;
 import data.enums.ComponentType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -12,6 +9,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +19,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
+import static data.enums.ComponentType.L029;
 import static utils.ServiceUtils.checkComponentsOnAircraft;
 import static utils.ServiceUtils.showWarning;
 import static utils.TextUtils.checkInputText;
@@ -65,6 +64,8 @@ public class PersonalComponentPageController {
     @FXML
     private CheckBox isUnmounted;
     @FXML
+    private AnchorPane specificForMkuMpuPane;
+    @FXML
     @Setter
     private MainController mainController;
     @Getter
@@ -79,6 +80,7 @@ public class PersonalComponentPageController {
     @FXML
     void initialize() {
         isUnmounted.setOnAction(e -> handleUnmountCheckboxSelected());
+        componentType.setOnAction(e -> hideSpecificFields());
         // установим ограничение на ввод данных: только цифры
         hoursOperTime.setTextFormatter(createFormatterForOnlyDigits(3));
         minutesOperTime.setTextFormatter(createFormatterForOnlyDigits(2));
@@ -110,37 +112,48 @@ public class PersonalComponentPageController {
     }
 
     void createComponent() {
-        if (componentType.getSelectionModel().getSelectedItem() == ComponentType.L029) {
-            // todo: отрисовка иной формы ввода для данного типа компонент
+
+        if (componentType.getSelectionModel().getSelectedItem() == L029) {
+            createdComponent = createL029();
         } else {
-            if (checkInputIsNotBlank()) {
-                createdComponent = createMPU_MKU(componentType.getValue());
-                isAvailableToAdd = checkComponentsOnAircraft(
-                        SavedData.getAircraft(createdComponent.getAttachedToAircraft()),
-                        createdComponent);
-                if (isAvailableToAdd) {
-                    if (isEditMode) {
-                        MPU_MKU componentInSave = (MPU_MKU) SavedData.components.get(componentIdInSavedData);
-                        if (!componentInSave.equals(createdComponent.getAttachedToAircraft())) {
-                            SavedData.aircraft.stream().filter(a -> a.toString().equals(
-                                    (componentInSave).getAttachedToAircraft()))
-                                    .forEach(a -> a.getComponents().remove(selectedComponent.toString())
-                                    );
-                            SavedData.aircraft.stream().filter(a -> a.toString().equals(
-                                    createdComponent.getAttachedToAircraft()))
-                                    .forEach(a -> a.getComponents().add(createdComponent.toString())
-                                    );
-                        }
-                        SavedData.components.set(componentIdInSavedData, createdComponent);
+            createdComponent = createMPU_MKU(componentType.getValue());
+        }
+        if (checkInputIsNotBlank()) {
+            isAvailableToAdd = checkComponentsOnAircraft(
+                    SavedData.getAircraft(createdComponent.getAttachedToAircraft()),
+                    createdComponent);
+            if (isAvailableToAdd) {
+                if (isEditMode) {
+                    if (SavedData.components.get(componentIdInSavedData) instanceof L029) {
+                        L029 componentInSave = (L029) SavedData.components.get(componentIdInSavedData);
+                        process(componentInSave);
                     } else {
-                        SavedData.getAircraft(componentAttachedTo.getValue()).getComponents().add(createdComponent.toString());
-                        SavedData.components.add(createdComponent);
+                        MPU_MKU componentInSave = (MPU_MKU) SavedData.components.get(componentIdInSavedData);
+                        process(componentInSave);
                     }
                     SavedData.saveCurrentStateData();
                 }
             }
         }
     }
+
+    private void process(Component componentInSave) {
+        if (!componentInSave.equals(createdComponent.getAttachedToAircraft())) {
+            SavedData.aircraft.stream().filter(a -> a.toString().equals(
+                    (componentInSave).getAttachedToAircraft()))
+                    .forEach(a -> a.getComponents().remove(selectedComponent.toString())
+                    );
+            SavedData.aircraft.stream().filter(a -> a.toString().equals(
+                    createdComponent.getAttachedToAircraft()))
+                    .forEach(a -> a.getComponents().add(createdComponent.toString())
+                    );
+            SavedData.components.set(componentIdInSavedData, createdComponent);
+        } else {
+            SavedData.getAircraft(componentAttachedTo.getValue()).getComponents().add(createdComponent.toString());
+            SavedData.components.add(createdComponent);
+        }
+    }
+
 
     @FXML
     public void handleClickCreateButton() {
@@ -157,20 +170,25 @@ public class PersonalComponentPageController {
         }
     }
 
-    void setParentController(AircraftComponentsTabController controller) {
+    public void setParentController(AircraftComponentsTabController controller) {
         this.controller = controller;
     }
 
     boolean checkInputIsNotBlank() {
-        return checkInputText(componentNumber.getText(),
+        boolean checkOk = checkInputText(componentNumber.getText(),
                 hoursOperTime.getText(),
                 minutesOperTime.getText(),
                 takeOffCount.getText(),
                 mainChannelFireCount.getText(),
-                reserveChannelFireCount.getText(),
-                rotationsCount.getText())
+                reserveChannelFireCount.getText())
                 && componentType.getSelectionModel().getSelectedItem() != null
                 && (componentAttachedTo.getSelectionModel().getSelectedItem() != null || isUnmountedFromAircraft);
+
+        if (createdComponent.getType() == L029) {
+            return checkOk;
+        } else {
+            return checkOk && checkInputText(rotationsCount.getText());
+        }
 
     }
 
@@ -183,6 +201,24 @@ public class PersonalComponentPageController {
             mainChannelFireCount.setText(String.valueOf(mku.getStartsOnMainChannel()));
             rotationsCount.setText(String.valueOf(mku.getRotationsCount()));
             takeOffCount.setText(String.valueOf(mku.getCountOfLandings()));
+            componentNumber.setText(String.valueOf(createdComponent.getNumber()));
+            componentType.setValue(createdComponent.getType());
+            isUnmounted.setSelected(createdComponent.isUnmounted());
+            handleUnmountCheckboxSelected();
+            if (!createdComponent.isUnmounted()) {
+                componentAttachedTo.setValue(SavedData.aircraft.stream()
+                        .filter(a -> a.toString()
+                                .equals(createdComponent
+                                        .getAttachedToAircraft()))
+                        .findAny().get().toString());
+            }
+        } else {
+            L029 l029 = (L029) createdComponent;
+            hoursOperTime.setText(String.valueOf(l029.getFlightOperatingTime() / 60));
+            minutesOperTime.setText(String.valueOf(l029.getFlightOperatingTime() % 60));
+            reserveChannelFireCount.setText(String.valueOf(l029.getStartsOnReserveChannel()));
+            mainChannelFireCount.setText(String.valueOf(l029.getStartsOnMainChannel()));
+            takeOffCount.setText(String.valueOf(l029.getCountOfLandings()));
             componentNumber.setText(String.valueOf(createdComponent.getNumber()));
             componentType.setValue(createdComponent.getType());
             isUnmounted.setSelected(createdComponent.isUnmounted());
@@ -295,6 +331,34 @@ public class PersonalComponentPageController {
                 Integer.parseInt(reserveChannelFireCount.getText()),
                 flightTime,
                 Integer.parseInt(rotationsCount.getText()));
+    }
+
+    private L029 createL029() {
+        int flightTime = Integer.parseInt(hoursOperTime.getText()) * 60 + Integer.parseInt(minutesOperTime.getText());
+        String attachedTo;
+        if (isUnmountedFromAircraft) {
+            attachedTo = "Снят с ВС. На хранении.";
+        } else {
+            attachedTo = componentAttachedTo.getSelectionModel().getSelectedItem();
+
+        }
+        return new L029(
+                attachedTo,
+                isUnmountedFromAircraft,
+                L029,
+                new BigDecimal(componentNumber.getText()),
+                Integer.parseInt(takeOffCount.getText()),
+                Integer.parseInt(mainChannelFireCount.getText()),
+                Integer.parseInt(reserveChannelFireCount.getText()),
+                flightTime);
+    }
+
+    private void hideSpecificFields() {
+        if (componentType.getSelectionModel().getSelectedItem() == L029) {
+            specificForMkuMpuPane.setVisible(false);
+        } else {
+            specificForMkuMpuPane.setVisible(true);
+        }
     }
 
 }
