@@ -2,6 +2,7 @@ package controller;
 
 import data.Engineer;
 import data.SavedData;
+import data.TextConstants;
 import data.enums.Rank;
 import gui.Main;
 import javafx.collections.FXCollections;
@@ -47,15 +48,14 @@ public class EngineersTabController {
 
 
     ObservableList<Rank> prepareMilitaryRanks() {
-        militaryRank.setTooltip(new Tooltip("Выбери звание инженера!"));
+        militaryRank.setTooltip(new Tooltip(TextConstants.SELECT_ENGINEERS_RANK));
         return FXCollections.observableList(new ArrayList<>(EnumSet.allOf(Rank.class)));
     }
 
     void updateEngineersList() {
         SavedData.readDataFromSave();
         if (SavedData.engineers.size() == 0) {
-            listOfEngineers.setPlaceholder(new Label("Не введены данные об инженерах.\n" +
-                    "Добавьте хотя бы одного человека."));
+            listOfEngineers.setPlaceholder(new Label(TextConstants.NO_ENGINEERS_RECORDS));
         } else if (listOfEngineers != null) {
             listOfEngineers.getItems().clear();
             for (Engineer engineer : SavedData.engineers) {

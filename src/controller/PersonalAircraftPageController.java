@@ -3,6 +3,7 @@ package controller;
 import data.Aircraft;
 import data.Component;
 import data.SavedData;
+import data.TextConstants;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -68,7 +69,7 @@ public class PersonalAircraftPageController {
         String component = componentsOnAircraft.getSelectionModel().getSelectedItem();
         aircraft.getComponents().remove(component);
         SavedData.components.stream().filter(c -> c.toString().equals(component)).forEach(c -> {
-            c.setAttachedToAircraft("Снят с ВС. На хранении.");
+            c.setAttachedToAircraft(TextConstants.UNATTACHED_FROM_AIRCRAFT);
             c.setUnmounted(true);
         });
         SavedData.aircraft.stream().filter(a -> a.getComponents().contains(component)).forEach(a -> a.getComponents().remove(component));

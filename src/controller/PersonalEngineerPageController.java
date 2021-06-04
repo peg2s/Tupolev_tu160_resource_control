@@ -3,6 +3,7 @@ package controller;
 import data.Aircraft;
 import data.Engineer;
 import data.SavedData;
+import data.TextConstants;
 import gui.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,7 +51,7 @@ public class PersonalEngineerPageController {
         // т.к. борт откреплен от ИАК, заменяем для наглядности запись, чтобы в списке ВС было легко заметить где чье.
         SavedData.aircraft.stream()
                 .filter(a -> a.getEngineer().equals(engineer.toString()))
-                .forEach(a -> a.setEngineer("За данным ВС не закреплен ни один инженер СПиСО"));
+                .forEach(a -> a.setEngineer(TextConstants.NO_ENGINEER_ATTACHED));
         // для инженера, имеющего этот борт в закрепленных снимаем связь
         SavedData.engineers.stream()
                 .filter(e -> e.getAttachedAircrafts().contains(aircraftToUnattach))

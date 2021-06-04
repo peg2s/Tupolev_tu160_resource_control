@@ -3,6 +3,7 @@ package controller;
 import data.Aircraft;
 import data.Engineer;
 import data.SavedData;
+import data.TextConstants;
 import gui.Main;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -150,8 +151,7 @@ public class AircraftTabController {
 
     void updateAircraftsList() {
         if (SavedData.aircraft.size() == 0) {
-            aircraftsList.setPlaceholder(new Label("Нет ни одной записи.\n" +
-                    "Добавьте хотя бы один самолёт."));
+            aircraftsList.setPlaceholder(new Label(TextConstants.NO_AIRCRAFT_RECORDS));
         }
         aircraftsList.getItems().clear();
         aircraftsList.getItems().addAll(SavedData.aircraft);

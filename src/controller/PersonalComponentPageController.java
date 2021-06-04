@@ -165,8 +165,7 @@ public class PersonalComponentPageController {
             ((Stage) createButton.getScene().getWindow()).close();
             mainController.getAircraftTabController().getPersonalAircraftPageController().updateComponentsList();
         } else {
-            showWarning("Проверьте заполнение полей! \n" +
-                    "Все поля должны быть заполнены!");
+            showWarning(TextConstants.CHECK_ALL_FIELDS_FILLED);
         }
     }
 
@@ -281,9 +280,9 @@ public class PersonalComponentPageController {
                 createdComponent = SavedData.components.get(id);
                 fillComponentInfo();
                 resetAdditionalFieldAfterAdd();
-                showWarning("Наработка успешно добавлена.");
+                showWarning(TextConstants.ADDITIONAL_OPERATING_ADDED);
             } else {
-                showWarning("Проверьте, что все поля заполнены. \nЕсли изменений не было, введите в это поле 0.");
+                showWarning(TextConstants.CHECK_ADDITIONAL_OPERATING_INPUT);
             }
         }
     }
@@ -316,7 +315,7 @@ public class PersonalComponentPageController {
         int flightTime = Integer.parseInt(hoursOperTime.getText()) * 60 + Integer.parseInt(minutesOperTime.getText());
         String attachedTo;
         if (isUnmountedFromAircraft) {
-            attachedTo = "Снят с ВС. На хранении.";
+            attachedTo = TextConstants.UNATTACHED_FROM_AIRCRAFT;
         } else {
             attachedTo = componentAttachedTo.getSelectionModel().getSelectedItem();
 
@@ -337,7 +336,7 @@ public class PersonalComponentPageController {
         int flightTime = Integer.parseInt(hoursOperTime.getText()) * 60 + Integer.parseInt(minutesOperTime.getText());
         String attachedTo;
         if (isUnmountedFromAircraft) {
-            attachedTo = "Снят с ВС. На хранении.";
+            attachedTo = TextConstants.UNATTACHED_FROM_AIRCRAFT;
         } else {
             attachedTo = componentAttachedTo.getSelectionModel().getSelectedItem();
 
@@ -354,11 +353,7 @@ public class PersonalComponentPageController {
     }
 
     private void hideSpecificFields() {
-        if (componentType.getSelectionModel().getSelectedItem() == L029) {
-            specificForMkuMpuPane.setVisible(false);
-        } else {
-            specificForMkuMpuPane.setVisible(true);
-        }
+        specificForMkuMpuPane.setVisible(componentType.getSelectionModel().getSelectedItem() != L029);
     }
 
 }
