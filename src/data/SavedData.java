@@ -2,9 +2,11 @@ package data;
 
 import io.reader.ReadFile;
 import io.writer.WriteFile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class SavedData {
     public static List<Engineer> engineers = ReadFile.readInfo(Engineer.class, "data.Engineer","ae");
     public static List<Aircraft> aircraft = ReadFile.readInfo(Aircraft.class, "data.Aircraft","ae");
@@ -24,6 +26,7 @@ public class SavedData {
 
 
     public static Engineer getEngineerFromList(String engineerRankAndName) {
+        log.info("getEngineerFromList(), engineerRankAndName {}", engineerRankAndName);
         for (Engineer e : engineers) {
             if (e.toString().equals(engineerRankAndName)) {
                 return e;
@@ -33,6 +36,7 @@ public class SavedData {
     }
 
     public static int getComponentId(Component component) {
+        log.info("getComponentId(), component {}", component);
         for (int i = 0; i<components.size(); i++) {
             if (component.equals(components.get(i))) {
                 return i;
@@ -42,6 +46,7 @@ public class SavedData {
     }
 
     public static Aircraft getAircraft(String selectedAircraft) {
-        return aircraft.stream().filter(a -> a.toString().equals(selectedAircraft)).findAny().get();
+        log.info("getAircraft(), selectedAircraft {}", selectedAircraft);
+        return aircraft.stream().filter(a -> a.toString().equals(selectedAircraft)).findAny().orElse(null);
     }
 }

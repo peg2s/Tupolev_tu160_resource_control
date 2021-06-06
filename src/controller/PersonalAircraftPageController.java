@@ -1,9 +1,6 @@
 package controller;
 
-import data.Aircraft;
-import data.Component;
-import data.SavedData;
-import data.TextConstants;
+import data.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -12,10 +9,12 @@ import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import utils.TextUtils;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 public class PersonalAircraftPageController {
 
     @FXML
@@ -48,6 +47,7 @@ public class PersonalAircraftPageController {
     private AircraftTabController aircraftTabController;
 
     public void setAircraft(Aircraft selectedAircraft) {
+        log.info(" setAircraft: {}", aircraft);
         this.aircraft = selectedAircraft;
         aircraftNumber.setText(aircraft.getSideNumber());
         aircraftName.setText(aircraft.getName());
@@ -59,7 +59,8 @@ public class PersonalAircraftPageController {
 
     @FXML
     void initialize() {
-        aircraftAttachedTo.getItems().addAll(SavedData.engineers.stream().map(e -> e.toString()).collect(Collectors.toList()));
+        log.info(" инициализация.");
+        aircraftAttachedTo.getItems().addAll(SavedData.engineers.stream().map(Engineer::toString).collect(Collectors.toList()));
         unattachSelectedComponent.setOnAction(e -> unattachComponent());
         createNewComponent.setOnAction(e -> openPersonalComponentPage());
         saveChanges.setOnAction(e -> handleSaveChangesButton());
@@ -67,6 +68,7 @@ public class PersonalAircraftPageController {
 
     private void unattachComponent() {
         String component = componentsOnAircraft.getSelectionModel().getSelectedItem();
+        log.info(" unattachComponent: {}", component);
         aircraft.getComponents().remove(component);
         SavedData.components.stream().filter(c -> c.toString().equals(component)).forEach(c -> {
             c.setAttachedToAircraft(TextConstants.UNATTACHED_FROM_AIRCRAFT);
@@ -80,11 +82,13 @@ public class PersonalAircraftPageController {
     @FXML
     @SneakyThrows
     void openPersonalComponentPage() {
+        log.info(" openPersonalComponentPage");
         MainController mainController = aircraftTabController.getMainController();
         mainController.getAircraftComponentsTabController().openPersonalComponentPage(mainController.getAircraftComponentsTabController());
     }
 
     public void updateComponentsList() {
+        log.info(" updateComponentsList");
         componentsOnAircraft.getItems().clear();
         componentsOnAircraft.getItems().addAll(SavedData.components
                 .stream()
@@ -94,6 +98,8 @@ public class PersonalAircraftPageController {
     }
 
     private void handleSaveChangesButton() {
+        log.info(" handleSaveChangesButton");
+
         if (TextUtils.checkInputText(aircraftNumber.getText(),
                 aircraftName.getText(),
                 aircraftRegNumber.getText())

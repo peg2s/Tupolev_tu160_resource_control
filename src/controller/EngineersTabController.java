@@ -16,12 +16,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
+@Slf4j
 public class EngineersTabController {
     @FXML
     @Getter
@@ -37,6 +39,7 @@ public class EngineersTabController {
 
     @FXML
     void initialize() {
+        log.info("инициализация.");
         SavedData.readDataFromSave();
         updateEngineersList();
         listOfEngineers.setOnMouseClicked(this::showEngineerEditDialog);

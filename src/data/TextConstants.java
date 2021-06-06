@@ -58,4 +58,10 @@ public class TextConstants {
     public static final String COMPONENT_ALREADY_EXISTS = "Агрегат с таким номером уже существует. Проверьте вводимые данные.";
 
     public static final String ATTENTION = "Внимание!";
+
+    public static final String EMPTY_FIELD_WARNING = "Проверьте, что все поля заполнены.";
+
+    public static final String TYPE_CHANGE_DENIED = "Смена типа агрегата через редактирование запрещена.\nПри необходимости создайте новый агрегат.";
+
+    public static final String AIRCRAFT_DUPLICATE = "Попытка дублирования записи.\nВС с таким номером или именем уже создан.";
 }

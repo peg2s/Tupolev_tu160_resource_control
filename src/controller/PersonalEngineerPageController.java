@@ -15,10 +15,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Optional;
 
+@Slf4j
 public class PersonalEngineerPageController {
 
     @FXML
@@ -36,6 +38,7 @@ public class PersonalEngineerPageController {
     private Engineer engineer;
 
     public void setEngineer(Engineer engineer) {
+        log.info("setEngineer, engineer {}", engineer);
         this.engineer = engineer;
         rankField.setText(engineer.getRank().getDescription());
         fullNameField.setText(engineer.getFullName());
@@ -59,7 +62,7 @@ public class PersonalEngineerPageController {
         attachedAircraftList.getItems().remove(aircraftToUnattach);
         SavedData.saveCurrentStateData();
         engineersTabController.updateEngineersList();
-
+        log.info("unattachAircraft, выбран борт {}", aircraftToUnattach);
     }
 
     private void attachAircraft(Aircraft aircraft) {
@@ -85,6 +88,7 @@ public class PersonalEngineerPageController {
         // сохраняем правки на компьютер
         SavedData.saveCurrentStateData();
         engineersTabController.updateEngineersList();
+        log.info("attachAircraft, aircraft {}, engineer {}", aircraft, engineer);
     }
 
     public void showAttachAircraftDialog() {

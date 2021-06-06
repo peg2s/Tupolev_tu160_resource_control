@@ -18,13 +18,16 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
+import static utils.ServiceUtils.checkAircraftDuplicate;
 import static utils.ServiceUtils.showWarning;
 import static utils.TextUtils.*;
 
+@Slf4j
 public class AircraftTabController {
 
     @FXML
@@ -52,11 +55,14 @@ public class AircraftTabController {
     @FXML
     private TableColumn<String, String> aircraftNameColumn;
     @Getter
+    @FXML
     private PersonalAircraftPageController personalAircraftPageController;
     private Aircraft selectedAircraft;
 
     @FXML
     void initialize() {
+        log.info("инициализация.");
+
         setRestrictionsToInputFields();
         aircraftName.setPromptText("Имя самолёта");
         regNumberField.setPromptText("Рег. номер (RF-*****)");
@@ -70,8 +76,9 @@ public class AircraftTabController {
     }
 
     void updateEngineersListOnAircraftTab() {
-            selectEngineerBox.getItems().clear();
-            selectEngineerBox.getItems().addAll(FXCollections.observableList(SavedData.engineers));
+        log.info("updateEngineersListOnAircraftTab");
+        selectEngineerBox.getItems().clear();
+        selectEngineerBox.getItems().addAll(FXCollections.observableList(SavedData.engineers));
     }
 
     void fillSelectedAircraftInfo() {
@@ -96,21 +103,37 @@ public class AircraftTabController {
                     .engineer(selectEngineerBox.getSelectionModel().getSelectedItem().toString())
                     .components(new ArrayList<>())
                     .build();
-            selectEngineerBox.getSelectionModel().getSelectedItem().getAttachedAircrafts().add(aircraft);
-            SavedData.engineers = selectEngineerBox.getItems();
-            aircraftsList.getItems().addAll(aircraft);
-            SavedData.aircraft.add(aircraft);
-            SavedData.saveCurrentStateData();
+            if (!checkAircraftDuplicate(aircraft)) {
+                selectEngineerBox.getSelectionModel().getSelectedItem().getAttachedAircrafts().add(aircraft);
+                SavedData.engineers = selectEngineerBox.getItems();
+                aircraftsList.getItems().addAll(aircraft);
+                SavedData.aircraft.add(aircraft);
+                SavedData.saveCurrentStateData();
+                log.info("добавлено ВС: \n б.н.: {}\n рег.н.: {} \n наименование: {}\n ИАК: {}",
+                        aircraft.getSideNumber(), aircraft.getRegNumber(),
+                        aircraft.getName(), aircraft.getEngineer());
+            }
         } else {
-            showWarning("Проверьте, что все поля заполнены.");
+            showWarning(TextConstants.EMPTY_FIELD_WARNING);
         }
     }
 
     @FXML
     void deleteAircraft() {
-        SavedData.aircraft.remove(aircraftsList.getSelectionModel().getSelectedItem());
+        Aircraft aircraftToDelete = aircraftsList.getSelectionModel().getSelectedItem();
+        SavedData.components.stream().filter(c -> c.getAttachedToAircraft().equals(aircraftToDelete.toString())).forEach(
+                component -> {
+                    component.setUnmounted(true);
+                    component.setAttachedToAircraft(TextConstants.UNATTACHED_FROM_AIRCRAFT);
+                }
+        );
+        SavedData.engineers.stream().filter(engineer -> engineer.getAttachedAircrafts().contains(aircraftToDelete)).forEach(
+                engineer ->
+                        engineer.getAttachedAircrafts().remove(aircraftToDelete));
+        SavedData.aircraft.remove(aircraftToDelete);
+        log.info("Удалено ВС: {}", aircraftToDelete);
         SavedData.saveCurrentStateData();
-        aircraftsList.getItems().remove(aircraftsList.getSelectionModel().getSelectedItem());
+        aircraftsList.getItems().remove(aircraftToDelete);
         aircraftsList.refresh();
     }
 
@@ -132,6 +155,7 @@ public class AircraftTabController {
         }
         SavedData.saveCurrentStateData();
         updateAircraftsList();
+        log.info("Редактирование ВС: {}", selectedAircraft);
     }
 
     void reloadInfoOnTab() {
@@ -146,6 +170,8 @@ public class AircraftTabController {
                 .filter(e -> e.toString().equals(aircraft.getEngineer()))
                 .forEach(engineer -> engineer.getAttachedAircrafts().remove(aircraft));
         selectEngineerBox.getSelectionModel().getSelectedItem().getAttachedAircrafts().add(selectedAircraft);
+        log.info("Переприкрепление ИАК на самолете: {} на: {}",
+                selectedAircraft, selectEngineerBox.getSelectionModel().getSelectedItem());
         SavedData.saveCurrentStateData();
     }
 
@@ -182,7 +208,7 @@ public class AircraftTabController {
     }
 
     private boolean checkInputFields() {
-       return checkInputText(regNumberField.getText(),
+        return checkInputText(regNumberField.getText(),
                 sideNumberField.getText(),
                 aircraftName.getText())
                 && selectEngineerBox.getSelectionModel().getSelectedItem() != null;

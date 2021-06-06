@@ -5,7 +5,7 @@ import data.enums.ComponentType;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.UUID;
 
 @Data
 public class L029 extends Component {
@@ -19,7 +19,7 @@ public class L029 extends Component {
                 ComponentType type, BigDecimal number,
                 int countOfLandings, int startsOnMainChannel,
                 int startsOnReserveChannel, int flightOperatingTime) {
-        super(attachedToAircraft, isUnmounted, type, number);
+        super(UUID.randomUUID(), attachedToAircraft, isUnmounted, type, number);
         this.countOfLandings = countOfLandings;
         this.startsOnMainChannel = startsOnMainChannel;
         this.startsOnReserveChannel = startsOnReserveChannel;
@@ -41,13 +41,6 @@ public class L029 extends Component {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         L029 l029 = (L029) o;
-        return super.getNumber().equals(l029.getNumber())
-                && countOfLandings == l029.countOfLandings
-                && startsOnMainChannel == l029.startsOnMainChannel
-                && startsOnReserveChannel == l029.startsOnReserveChannel
-                && flightOperatingTime == l029.flightOperatingTime
-                && super.isUnmounted() == l029.isUnmounted()
-                && super.getType() == l029.getType()
-                && Objects.equals(super.getAttachedToAircraft(), l029.getAttachedToAircraft());
+        return getUuid().equals(l029.getUuid());
     }
 }

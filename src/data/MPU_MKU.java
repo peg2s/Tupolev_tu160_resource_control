@@ -5,7 +5,7 @@ import data.enums.ComponentType;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.UUID;
 
 @Data
 public class MPU_MKU extends Component {
@@ -17,7 +17,7 @@ public class MPU_MKU extends Component {
     private int rotationsCount;
 
     public MPU_MKU(String attachedToAircraft, boolean isUnmounted, ComponentType type, BigDecimal number, int countOfLandings, int startsOnMainChannel, int startsOnReserveChannel, int flightOperatingTime, int rotationsCount) {
-        super(attachedToAircraft, isUnmounted, type, number);
+        super(UUID.randomUUID(), attachedToAircraft, isUnmounted, type, number);
         this.countOfLandings = countOfLandings;
         this.startsOnMainChannel = startsOnMainChannel;
         this.startsOnReserveChannel = startsOnReserveChannel;
@@ -40,14 +40,6 @@ public class MPU_MKU extends Component {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MPU_MKU mpu_mku = (MPU_MKU) o;
-        return super.getNumber().equals(mpu_mku.getNumber())
-                && countOfLandings == mpu_mku.countOfLandings
-                && startsOnMainChannel == mpu_mku.startsOnMainChannel
-                && startsOnReserveChannel == mpu_mku.startsOnReserveChannel
-                && flightOperatingTime == mpu_mku.flightOperatingTime
-                && rotationsCount == mpu_mku.rotationsCount
-                && super.isUnmounted() == mpu_mku.isUnmounted()
-                && super.getType() == mpu_mku.getType()
-                && Objects.equals(super.getAttachedToAircraft(), mpu_mku.getAttachedToAircraft());
+        return getUuid().equals(mpu_mku.getUuid());
     }
 }

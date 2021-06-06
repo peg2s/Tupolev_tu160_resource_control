@@ -2,9 +2,11 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import lombok.extern.slf4j.Slf4j;
 
 import static data.TextConstants.*;
 
+@Slf4j
 public class FaqTabController {
     @FXML
     private TextArea introduction;
@@ -19,6 +21,7 @@ public class FaqTabController {
 
     @FXML
     void initialize() {
+        log.info("инициализация.");
         fillFaqText();
     }
 
