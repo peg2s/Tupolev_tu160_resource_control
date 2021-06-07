@@ -20,6 +20,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import utils.TextUtils;
 
 import java.util.ArrayList;
 
@@ -113,8 +114,6 @@ public class AircraftTabController {
                         aircraft.getSideNumber(), aircraft.getRegNumber(),
                         aircraft.getName(), aircraft.getEngineer());
             }
-        } else {
-            showWarning(TextConstants.EMPTY_FIELD_WARNING);
         }
     }
 
@@ -199,6 +198,7 @@ public class AircraftTabController {
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(page);
         dialogStage.setScene(scene);
+        dialogStage.setResizable(false);
         PersonalAircraftPageController controller = loader.getController();
         controller.setAircraftTabController(this);
         controller.setAircraft(aircraftsList.getSelectionModel().getSelectedItem());
@@ -208,10 +208,14 @@ public class AircraftTabController {
     }
 
     private boolean checkInputFields() {
-        return checkInputText(regNumberField.getText(),
+        boolean checkOk =  checkInputText(regNumberField.getText(),
                 sideNumberField.getText(),
                 aircraftName.getText())
                 && selectEngineerBox.getSelectionModel().getSelectedItem() != null;
+        if (!checkOk) {
+            showWarning(TextConstants.EMPTY_FIELD_WARNING);
+            return false;
+        } else return TextUtils.checkAircraftRegNumber(regNumberField.getText());
     }
 
     private void setRestrictionsToInputFields() {

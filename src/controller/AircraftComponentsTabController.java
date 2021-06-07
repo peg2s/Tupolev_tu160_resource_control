@@ -82,6 +82,7 @@ public class AircraftComponentsTabController {
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(page);
         dialogStage.setScene(scene);
+        dialogStage.setResizable(false);
         PersonalComponentPageController controller = loader.getController();
         controller.setParentController(aircraftComponentsTabController);
         controller.setMainController(mainController);

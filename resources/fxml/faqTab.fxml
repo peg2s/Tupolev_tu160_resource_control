@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="848.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FaqTabController">
-                <Accordion layoutY="10.0" prefHeight="250.0" prefWidth="868.0" AnchorPane.leftAnchor="0.0"
+                <Accordion layoutY="10.0" prefHeight="270.0" prefWidth="868.0" AnchorPane.leftAnchor="0.0"
                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                     <panes>
                         <TitledPane animated="false" style="-fx-font-weight: bold;" text="1. Введение">

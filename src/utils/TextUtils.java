@@ -1,5 +1,6 @@
 package utils;
 
+import data.TextConstants;
 import javafx.scene.control.TextFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -74,6 +75,14 @@ public class TextUtils {
             if (StringUtils.isBlank(t)) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    public static boolean checkAircraftRegNumber(String regNumber) {
+        if (regNumber.length() < 7) {
+            ServiceUtils.showWarning(TextConstants.REG_NUMBER_CHECK);
+            return false;
         }
         return true;
     }

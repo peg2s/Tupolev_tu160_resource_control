@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
+import static utils.TextUtils.createFormatterForOnlyText;
+
 @Slf4j
 public class EngineersTabController {
     @FXML
@@ -40,6 +42,7 @@ public class EngineersTabController {
     @FXML
     void initialize() {
         log.info("инициализация.");
+        fullEngineersName.setTextFormatter(createFormatterForOnlyText("^(?i)[А-Я,а-я?,., \t]{0,40}$"));
         SavedData.readDataFromSave();
         updateEngineersList();
         listOfEngineers.setOnMouseClicked(this::showEngineerEditDialog);
@@ -77,6 +80,7 @@ public class EngineersTabController {
                 dialogStage.initModality(Modality.APPLICATION_MODAL);
                 Scene scene = new Scene(page);
                 dialogStage.setScene(scene);
+                dialogStage.setResizable(false);
                 PersonalEngineerPageController controller = loader.getController();
                 controller.setEngineersTabController(this);
                 controller.setEngineer(listOfEngineers.getSelectionModel().getSelectedItem());
