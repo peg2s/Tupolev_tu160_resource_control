@@ -38,7 +38,6 @@ public class PersonalEngineerPageController {
     private Engineer engineer;
 
     public void setEngineer(Engineer engineer) {
-        log.info("setEngineer, engineer {}", engineer);
         this.engineer = engineer;
         rankField.setText(engineer.getRank().getDescription());
         fullNameField.setText(engineer.getFullName());
@@ -62,7 +61,7 @@ public class PersonalEngineerPageController {
         attachedAircraftList.getItems().remove(aircraftToUnattach);
         SavedData.saveCurrentStateData();
         engineersTabController.updateEngineersList();
-        log.info("unattachAircraft, выбран борт {}", aircraftToUnattach);
+        log.info("открепляем от инженера ВС, выбран борт {}", aircraftToUnattach);
     }
 
     private void attachAircraft(Aircraft aircraft) {
@@ -88,7 +87,7 @@ public class PersonalEngineerPageController {
         // сохраняем правки на компьютер
         SavedData.saveCurrentStateData();
         engineersTabController.updateEngineersList();
-        log.info("attachAircraft, aircraft {}, engineer {}", aircraft, engineer);
+        log.info("прикрепляем ВС, aircraft {}, engineer {}", aircraft, engineer);
     }
 
     public void showAttachAircraftDialog() {

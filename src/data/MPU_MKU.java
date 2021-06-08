@@ -10,18 +10,14 @@ import java.util.UUID;
 @Data
 public class MPU_MKU extends Component {
 
-    private int countOfLandings;
-    private int startsOnMainChannel;
-    private int startsOnReserveChannel;
-    private int flightOperatingTime;
     private int rotationsCount;
 
-    public MPU_MKU(String attachedToAircraft, boolean isUnmounted, ComponentType type, BigDecimal number, int countOfLandings, int startsOnMainChannel, int startsOnReserveChannel, int flightOperatingTime, int rotationsCount) {
-        super(UUID.randomUUID(), attachedToAircraft, isUnmounted, type, number);
-        this.countOfLandings = countOfLandings;
-        this.startsOnMainChannel = startsOnMainChannel;
-        this.startsOnReserveChannel = startsOnReserveChannel;
-        this.flightOperatingTime = flightOperatingTime;
+    public MPU_MKU(String attachedToAircraft, boolean isUnmounted, ComponentType type, BigDecimal number,
+                   int countOfLandings, int startsOnMainChannel, int startsOnReserveChannel,
+                   int flightOperatingTime, int rotationsCount) {
+        super(UUID.randomUUID(), attachedToAircraft, isUnmounted,
+                type, number, countOfLandings, startsOnMainChannel,
+                startsOnReserveChannel, flightOperatingTime);
         this.rotationsCount = rotationsCount;
     }
 

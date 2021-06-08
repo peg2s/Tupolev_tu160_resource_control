@@ -62,11 +62,10 @@ public class AircraftTabController {
 
     @FXML
     void initialize() {
-        log.info("инициализация.");
-
+        aircraftsList.setPlaceholder(new Label(TextConstants.NO_AIRCRAFT_RECORDS));
         setRestrictionsToInputFields();
         aircraftName.setPromptText("Имя самолёта");
-        regNumberField.setPromptText("Рег. номер (RF-*****)");
+        regNumberField.setPromptText("RF-*****");
         sideNumberField.setPromptText("б/н");
         reloadInfoOnTab();
         aircraftsList.setOnMouseClicked(this::handleClickOnAircraftList);
@@ -77,7 +76,6 @@ public class AircraftTabController {
     }
 
     void updateEngineersListOnAircraftTab() {
-        log.info("updateEngineersListOnAircraftTab");
         selectEngineerBox.getItems().clear();
         selectEngineerBox.getItems().addAll(FXCollections.observableList(SavedData.engineers));
     }
@@ -147,7 +145,7 @@ public class AircraftTabController {
             SavedData.aircraft.stream().filter(a -> a.equals(selectedAircraft))
                     .forEach(a -> {
                         selectedAircraft.setSideNumber(sideNumberField.getText());
-                        selectedAircraft.setRegNumber(regNumberField.getText());
+                        selectedAircraft.setRegNumber("RF-" + regNumberField.getText());
                         selectedAircraft.setEngineer(selectEngineerBox.getSelectionModel().getSelectedItem().toString());
                         selectedAircraft.setName(aircraftName.getText());
                     });
@@ -175,9 +173,6 @@ public class AircraftTabController {
     }
 
     void updateAircraftsList() {
-        if (SavedData.aircraft.size() == 0) {
-            aircraftsList.setPlaceholder(new Label(TextConstants.NO_AIRCRAFT_RECORDS));
-        }
         aircraftsList.getItems().clear();
         aircraftsList.getItems().addAll(SavedData.aircraft);
     }
@@ -208,9 +203,7 @@ public class AircraftTabController {
     }
 
     private boolean checkInputFields() {
-        boolean checkOk =  checkInputText(regNumberField.getText(),
-                sideNumberField.getText(),
-                aircraftName.getText())
+        boolean checkOk =  checkInputText(regNumberField, sideNumberField, aircraftName)
                 && selectEngineerBox.getSelectionModel().getSelectedItem() != null;
         if (!checkOk) {
             showWarning(TextConstants.EMPTY_FIELD_WARNING);
@@ -221,7 +214,7 @@ public class AircraftTabController {
     private void setRestrictionsToInputFields() {
         sideNumberField.setTextFormatter(createFormatterForOnlyDigits(2));
         aircraftName.setTextFormatter(createFormatterForOnlyText("^(?i)[А-Я,а-я? ]{0,40}$"));
-        regNumberField.setTextFormatter(createFormatterForOnlyText("^(?i)rf?-?[0-9]{0,7}"));
+        regNumberField.setTextFormatter(createFormatterForOnlyText("^[0-9]{0,5}"));
     }
 }
 

@@ -41,7 +41,7 @@ public class EngineersTabController {
 
     @FXML
     void initialize() {
-        log.info("инициализация.");
+        listOfEngineers.setPlaceholder(new Label(TextConstants.NO_ENGINEERS_RECORDS));
         fullEngineersName.setTextFormatter(createFormatterForOnlyText("^(?i)[А-Я,а-я?,., \t]{0,40}$"));
         SavedData.readDataFromSave();
         updateEngineersList();
@@ -60,9 +60,7 @@ public class EngineersTabController {
 
     void updateEngineersList() {
         SavedData.readDataFromSave();
-        if (SavedData.engineers.size() == 0) {
-            listOfEngineers.setPlaceholder(new Label(TextConstants.NO_ENGINEERS_RECORDS));
-        } else if (listOfEngineers != null) {
+        if (listOfEngineers != null) {
             listOfEngineers.getItems().clear();
             for (Engineer engineer : SavedData.engineers) {
                 listOfEngineers.getItems().addAll(engineer);
@@ -84,6 +82,7 @@ public class EngineersTabController {
                 PersonalEngineerPageController controller = loader.getController();
                 controller.setEngineersTabController(this);
                 controller.setEngineer(listOfEngineers.getSelectionModel().getSelectedItem());
+                log.info("Открытие карточки ИАК для {}", listOfEngineers.getSelectionModel().getSelectedItem());
                 dialogStage.show();
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -107,7 +106,7 @@ public class EngineersTabController {
             listOfEngineers.getItems().addAll(engineer);
             SavedData.engineers.add(engineer);
             SavedData.saveCurrentStateData();
-
+            log.info("Добавлен инженер: {}", engineer);
         }
     }
 
@@ -115,6 +114,7 @@ public class EngineersTabController {
     void deleteEngineer() {
         SavedData.engineers.remove(listOfEngineers.getSelectionModel().getSelectedItem());
         SavedData.saveCurrentStateData();
+        log.info("Удален инженер :{}", listOfEngineers.getSelectionModel().getSelectedItem());
         listOfEngineers.getItems().remove(listOfEngineers.getSelectionModel().getSelectedItem());
         listOfEngineers.refresh();
     }
@@ -128,6 +128,10 @@ public class EngineersTabController {
         }
         SavedData.saveCurrentStateData();
         updateEngineersList();
+        log.info("Редактирование инженера {}, новые данные {} {}",
+                listOfEngineers.getSelectionModel().getSelectedItem(),
+                militaryRank.getSelectionModel().getSelectedItem(),
+                fullEngineersName.getText());
     }
 }
 

@@ -32,12 +32,13 @@
         </Label>
         <TextField fx:id="aircraftNumber" layoutX="127.0" layoutY="23.0" prefHeight="25.0" prefWidth="453.0" />
         <TextField fx:id="aircraftName" layoutX="127.0" layoutY="51.0" prefHeight="25.0" prefWidth="453.0" />
-        <TextField fx:id="aircraftRegNumber" layoutX="127.0" layoutY="80.0" prefHeight="25.0" prefWidth="453.0" />
+        <TextField fx:id="aircraftRegNumber" layoutX="147.0" layoutY="80.0" prefHeight="25.0" prefWidth="433.0" />
         <ChoiceBox fx:id="aircraftAttachedTo" layoutX="127.0" layoutY="109.0" prefHeight="25.0" prefWidth="453.0" />
         <ListView fx:id="componentsOnAircraft" layoutX="15.0" layoutY="165.0" prefHeight="225.0" prefWidth="572.0" />
         <Label layoutX="155.0" layoutY="142.0" text="На самолёт установлены следующие агрегаты:" />
         <Button fx:id="createNewComponent" layoutX="15.0" layoutY="402.0" mnemonicParsing="false" text="Создать новый агрегат" />
         <Button fx:id="unattachSelectedComponent" layoutX="166.0" layoutY="402.0" mnemonicParsing="false" text="Открепить агрегат" />
       <Button fx:id="saveChanges" layoutX="448.0" layoutY="402.0" mnemonicParsing="false" text="Сохранить изменения" />
+      <Label layoutX="127.0" layoutY="85.0" text="RF-" />
     </children>
 </AnchorPane>

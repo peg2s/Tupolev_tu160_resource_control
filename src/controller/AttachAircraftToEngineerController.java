@@ -23,12 +23,10 @@ public class AttachAircraftToEngineerController {
     @SneakyThrows
     @FXML
     void initialize() {
-        log.info("инициализация.");
         listOfAircaftToAttach.getItems().addAll(SavedData.aircraft);
     }
 
     public Optional<Aircraft> handleClickAttachButton() {
-        log.info("handleClickAttachButton");
         ((Stage) attachButton.getScene().getWindow()).close();
         return Optional.ofNullable(listOfAircaftToAttach.getSelectionModel().getSelectedItem());
     }

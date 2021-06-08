@@ -25,4 +25,8 @@ public class Component {
     private boolean isUnmounted;
     private ComponentType type;
     private BigDecimal number;
+    private int countOfLandings;
+    private int startsOnMainChannel;
+    private int startsOnReserveChannel;
+    private int flightOperatingTime;
 }

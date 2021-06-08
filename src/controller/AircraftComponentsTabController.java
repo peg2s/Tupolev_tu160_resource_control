@@ -2,12 +2,14 @@ package controller;
 
 import data.Component;
 import data.SavedData;
+import data.TextConstants;
 import data.enums.ComponentType;
 import gui.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -48,7 +50,7 @@ public class AircraftComponentsTabController {
 
     @FXML
     void initialize() {
-        log.info("инициализация.");
+        componentsList.setPlaceholder(new Label(TextConstants.NO_COMPONENTS_RECORDS));
 
         SavedData.readDataFromSave();
         componentsList.getItems().addAll(SavedData.components);

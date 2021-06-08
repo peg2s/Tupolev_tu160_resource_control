@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ public class PersonalComponentPageController {
     }
 
     public void prepareComponentToEdit(Component component) {
-        log.info("Выполняется редактирование компонента {}", component);
+        log.info("Окно редактирования компонента {}", component);
         isEditMode = true;
         componentIdInSavedData = SavedData.getComponentId(component);
         this.createdComponent = component;
@@ -194,12 +195,9 @@ public class PersonalComponentPageController {
     }
 
     boolean checkInputIsNotBlank() {
-        boolean checkOk = checkInputText(componentNumber.getText(),
-                hoursOperTime.getText(),
-                minutesOperTime.getText(),
-                takeOffCount.getText(),
-                mainChannelFireCount.getText(),
-                reserveChannelFireCount.getText())
+        boolean checkOk = checkInputText(componentNumber, hoursOperTime,
+                minutesOperTime, takeOffCount,
+                mainChannelFireCount, reserveChannelFireCount)
                 && componentType.getSelectionModel().getSelectedItem() != null
                 && (componentAttachedTo.getSelectionModel().getSelectedItem() != null || isUnmountedFromAircraft);
 
@@ -210,53 +208,34 @@ public class PersonalComponentPageController {
             }
             return true;
         } else {
-            if (!checkOk && checkInputText(rotationsCount.getText())) {
-                showWarning(TextConstants.EMPTY_FIELD_WARNING);
+            if (!checkOk && checkInputText(rotationsCount)) {
                 return false;
             }
-            return checkOk && checkInputText(rotationsCount.getText());
+            return checkOk && checkInputText(rotationsCount);
         }
     }
 
     void fillComponentInfo() {
+        hoursOperTime.setText(String.valueOf(createdComponent.getFlightOperatingTime() / 60));
+        minutesOperTime.setText(String.valueOf(createdComponent.getFlightOperatingTime() % 60));
+        reserveChannelFireCount.setText(String.valueOf(createdComponent.getStartsOnReserveChannel()));
+        mainChannelFireCount.setText(String.valueOf(createdComponent.getStartsOnMainChannel()));
+        takeOffCount.setText(String.valueOf(createdComponent.getCountOfLandings()));
+        componentNumber.setText(String.valueOf(createdComponent.getNumber()));
+        componentType.setValue(createdComponent.getType());
+        isUnmounted.setSelected(createdComponent.isUnmounted());
         if (createdComponent instanceof MPU_MKU) {
-            MPU_MKU mku = (MPU_MKU) createdComponent;
-            hoursOperTime.setText(String.valueOf(mku.getFlightOperatingTime() / 60));
-            minutesOperTime.setText(String.valueOf(mku.getFlightOperatingTime() % 60));
-            reserveChannelFireCount.setText(String.valueOf(mku.getStartsOnReserveChannel()));
-            mainChannelFireCount.setText(String.valueOf(mku.getStartsOnMainChannel()));
-            rotationsCount.setText(String.valueOf(mku.getRotationsCount()));
-            takeOffCount.setText(String.valueOf(mku.getCountOfLandings()));
-            componentNumber.setText(String.valueOf(createdComponent.getNumber()));
-            componentType.setValue(createdComponent.getType());
-            isUnmounted.setSelected(createdComponent.isUnmounted());
-            handleUnmountCheckboxSelected();
-            if (!createdComponent.isUnmounted()) {
-                componentAttachedTo.setValue(SavedData.aircraft.stream()
-                        .filter(a -> a.toString()
-                                .equals(createdComponent
-                                        .getAttachedToAircraft()))
-                        .findAny().get().toString());
-            }
-        } else {
-            L029 l029 = (L029) createdComponent;
-            hoursOperTime.setText(String.valueOf(l029.getFlightOperatingTime() / 60));
-            minutesOperTime.setText(String.valueOf(l029.getFlightOperatingTime() % 60));
-            reserveChannelFireCount.setText(String.valueOf(l029.getStartsOnReserveChannel()));
-            mainChannelFireCount.setText(String.valueOf(l029.getStartsOnMainChannel()));
-            takeOffCount.setText(String.valueOf(l029.getCountOfLandings()));
-            componentNumber.setText(String.valueOf(createdComponent.getNumber()));
-            componentType.setValue(createdComponent.getType());
-            isUnmounted.setSelected(createdComponent.isUnmounted());
-            handleUnmountCheckboxSelected();
-            if (!createdComponent.isUnmounted()) {
-                componentAttachedTo.setValue(SavedData.aircraft.stream()
-                        .filter(a -> a.toString()
-                                .equals(createdComponent
-                                        .getAttachedToAircraft()))
-                        .findAny().get().toString());
-            }
+            rotationsCount.setText(String.valueOf(((MPU_MKU) (createdComponent)).getRotationsCount()));
         }
+            isUnmounted.setSelected(createdComponent.isUnmounted());
+            handleUnmountCheckboxSelected();
+            if (!createdComponent.isUnmounted()) {
+                componentAttachedTo.setValue(SavedData.aircraft.stream()
+                        .filter(a -> a.toString()
+                                .equals(createdComponent
+                                        .getAttachedToAircraft()))
+                        .findAny().get().toString());
+            }
         hideSpecificFields();
     }
 
@@ -273,119 +252,54 @@ public class PersonalComponentPageController {
     }
 
     private void addLastFlightInfo() {
-        boolean isAdditionalOperationAllowedToAdd = checkAdditionalOperating(additionalOperTimeHours.getText(),
-                additionalOperTimeMinutes.getText(),
-                additionalRotationsCount.getText(),
-                additionalMainChannelFireCount.getText(),
-                additionalReserveChannelFireCount.getText(),
-                additionalTakeOffCount.getText());
-
-        if (createdComponent instanceof MPU_MKU) {
-            int id = SavedData.getComponentId(createdComponent);
-            if (checkInputText(additionalOperTimeHours.getText(),
-                    additionalOperTimeMinutes.getText(),
-                    additionalTakeOffCount.getText(),
-                    additionalRotationsCount.getText(),
-                    additionalMainChannelFireCount.getText(),
-                    reserveChannelFireCount.getText())
-                    && isAdditionalOperationAllowedToAdd) {
-                SavedData.components
-                        .stream()
-                        .filter(c -> c.equals(createdComponent))
-                        .forEach((c ->
-                        {
-                            ((MPU_MKU) c).setCountOfLandings(
-                                    ((MPU_MKU) c).getCountOfLandings()
-                                            + Integer.parseInt(additionalTakeOffCount.getText()));
+        int id = SavedData.getComponentId(createdComponent);
+        if (check(createdComponent)) {
+            SavedData.components
+                    .stream()
+                    .filter(c -> c.equals(createdComponent))
+                    .forEach((c ->
+                    {
+                        c.setCountOfLandings(
+                                c.getCountOfLandings()
+                                        + Integer.parseInt(additionalTakeOffCount.getText()));
+                        if (createdComponent instanceof MPU_MKU) {
                             ((MPU_MKU) c).setRotationsCount(
                                     ((MPU_MKU) c).getRotationsCount()
                                             + Integer.parseInt(additionalRotationsCount.getText()));
-                            ((MPU_MKU) c).setStartsOnMainChannel(
-                                    ((MPU_MKU) c).getStartsOnMainChannel()
-                                            + Integer.parseInt(additionalMainChannelFireCount.getText()));
-                            ((MPU_MKU) c).setStartsOnReserveChannel(
-                                    ((MPU_MKU) c).getStartsOnReserveChannel()
-                                            + Integer.parseInt(additionalReserveChannelFireCount.getText()));
-                            ((MPU_MKU) c).setFlightOperatingTime(
-                                    ((MPU_MKU) c).getFlightOperatingTime()
-                                            + Integer.parseInt(additionalOperTimeMinutes.getText()) +
-                                            Integer.parseInt(additionalOperTimeHours.getText()) * 60);
+                        }
+                        c.setStartsOnMainChannel(
+                                c.getStartsOnMainChannel()
+                                        + Integer.parseInt(additionalMainChannelFireCount.getText()));
+                        c.setStartsOnReserveChannel(
+                                c.getStartsOnReserveChannel()
+                                        + Integer.parseInt(additionalReserveChannelFireCount.getText()));
+                        c.setFlightOperatingTime(
+                                c.getFlightOperatingTime()
+                                        + Integer.parseInt(additionalOperTimeMinutes.getText()) +
+                                        Integer.parseInt(additionalOperTimeHours.getText()) * 60);
 
-                        }));
-                SavedData.saveCurrentStateData();
-                controller.updateComponentsList();
-                createdComponent = SavedData.components.get(id);
-                fillComponentInfo();
-                log.info("addLastFlightInfo, \n" +
-                                "добавлена наработка для компонента {} \n, " +
-                                "часы {} \n " +
-                                "минуты {} \n " +
-                                "посадки {} \n " +
-                                "число поворотов {} \n " +
-                                "число пусков осн. {} \n " +
-                                "число пусков рез. {} \n",
-                        createdComponent,
-                        additionalOperTimeHours.getText(),
-                        additionalOperTimeMinutes.getText(),
-                        additionalTakeOffCount.getText(),
-                        additionalRotationsCount.getText(),
-                        additionalMainChannelFireCount.getText(),
-                        reserveChannelFireCount.getText());
-                resetAdditionalFieldAfterAdd();
-                showWarning(TextConstants.ADDITIONAL_OPERATING_ADDED);
-            } else {
-                showWarning(TextConstants.CHECK_ADDITIONAL_OPERATING_INPUT);
-            }
-        } else if (createdComponent instanceof L029) {
-            int id = SavedData.getComponentId(createdComponent);
-            if (checkInputText(additionalOperTimeHours.getText(),
+                    }));
+            SavedData.saveCurrentStateData();
+            controller.updateComponentsList();
+            createdComponent = SavedData.components.get(id);
+            fillComponentInfo();
+            log.info("добавлена наработка для компонента {} \n" +
+                            " часы {} \n " +
+                            "минуты {} \n " +
+                            "посадки {} \n " +
+                            "число поворотов {} \n " +
+                            "число пусков осн. {} \n " +
+                            "число пусков рез. {} \n",
+                    createdComponent,
+                    additionalOperTimeHours.getText(),
                     additionalOperTimeMinutes.getText(),
                     additionalTakeOffCount.getText(),
+                    StringUtils.isNotBlank(additionalRotationsCount.getText())
+                            ? additionalRotationsCount.getText() : TextConstants.NO_COMPLIANT_FOR_L029,
                     additionalMainChannelFireCount.getText(),
-                    reserveChannelFireCount.getText())
-                    && isAdditionalOperationAllowedToAdd) {
-                SavedData.components
-                        .stream()
-                        .filter(c -> c.equals(createdComponent))
-                        .forEach((c ->
-                        {
-                            ((L029) c).setCountOfLandings(
-                                    ((L029) c).getCountOfLandings()
-                                            + Integer.parseInt(additionalTakeOffCount.getText()));
-                            ((L029) c).setStartsOnMainChannel(
-                                    ((L029) c).getStartsOnMainChannel()
-                                            + Integer.parseInt(additionalMainChannelFireCount.getText()));
-                            ((L029) c).setStartsOnReserveChannel(
-                                    ((L029) c).getStartsOnReserveChannel()
-                                            + Integer.parseInt(additionalReserveChannelFireCount.getText()));
-                            ((L029) c).setFlightOperatingTime(
-                                    ((L029) c).getFlightOperatingTime()
-                                            + Integer.parseInt(additionalOperTimeMinutes.getText()) +
-                                            Integer.parseInt(additionalOperTimeHours.getText()) * 60);
-
-                        }));
-                SavedData.saveCurrentStateData();
-                controller.updateComponentsList();
-                createdComponent = SavedData.components.get(id);
-                fillComponentInfo();
-                log.info("addLastFlightInfo,\n " +
-                                "добавлена наработка для компонента {} \n " +
-                                "часы {} \n " +
-                                "минуты {} \n " +
-                                "посадки {} \n " +
-                                "число пусков осн. {} \n " +
-                                "число пусков рез. {} \n",
-                        createdComponent,
-                        additionalOperTimeHours.getText(),
-                        additionalOperTimeMinutes.getText(),
-                        additionalTakeOffCount.getText(),
-                        additionalMainChannelFireCount.getText(),
-                        reserveChannelFireCount.getText());
-                resetAdditionalFieldAfterAdd();
-                showWarning(TextConstants.ADDITIONAL_OPERATING_ADDED);
-            } else if (isAdditionalOperationAllowedToAdd) {
-                showWarning(TextConstants.CHECK_ADDITIONAL_OPERATING_INPUT);
-            }
+                    additionalReserveChannelFireCount.getText());
+            resetAdditionalFieldAfterAdd();
+            showWarning(TextConstants.ADDITIONAL_OPERATING_ADDED);
         }
     }
 
@@ -463,6 +377,22 @@ public class PersonalComponentPageController {
 
     private void hideSpecificFields() {
         specificForMkuMpuPane.setVisible(componentType.getSelectionModel().getSelectedItem() != L029);
+    }
+
+    private boolean check(Component component) {
+        boolean checkInputOk = checkInputText(additionalOperTimeHours, additionalOperTimeMinutes,
+                additionalMainChannelFireCount, additionalReserveChannelFireCount, additionalTakeOffCount);
+        if (component instanceof MPU_MKU) {
+            return checkInputOk && checkInputText(rotationsCount)
+                    && checkAdditionalOperating(additionalOperTimeHours, additionalOperTimeMinutes,
+                    additionalRotationsCount, additionalMainChannelFireCount, additionalReserveChannelFireCount,
+                    additionalTakeOffCount);
+        } else {
+            return checkInputOk
+                    && checkAdditionalOperating(additionalOperTimeHours, additionalOperTimeMinutes,
+                    null, additionalMainChannelFireCount,
+                    additionalReserveChannelFireCount, additionalTakeOffCount);
+        }
     }
 
 }

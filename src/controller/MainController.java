@@ -3,13 +3,18 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MainController {
     @FXML
     Tab aircraftTabButton;
 
     @FXML
     Tab engineerTabButton;
+
+//    @FXML
+//    Tab componentsTabButton;
 
     @FXML
     @Getter
@@ -27,16 +32,19 @@ public class MainController {
     void updateAircraftTab() {
         aircraftTabController.updateAircraftsList();
         aircraftTabController.updateEngineersListOnAircraftTab();
+        log.info("Выбрана вкладка \"Список ВС\"");
     }
 
     @FXML
     void updateEngineerTab() {
         engineersTabController.updateEngineersList();
+        log.info("Выбрана вкладка \"Список ИАК\"");
     }
 
     @FXML
     void updateComponentsTab() {
         aircraftComponentsTabController.updateComponentsList();
+        log.info("Выбрана вкладка \"Список агрегатов\"");
     }
 
     @FXML
@@ -44,5 +52,6 @@ public class MainController {
         aircraftTabController.setMainController(this);
         aircraftComponentsTabController.setMainController(this);
     }
+
 
 }

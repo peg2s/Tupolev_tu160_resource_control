@@ -10,20 +10,13 @@ import java.util.UUID;
 @Data
 public class L029 extends Component {
 
-    private int countOfLandings;
-    private int startsOnMainChannel;
-    private int startsOnReserveChannel;
-    private int flightOperatingTime;
-
     public L029(String attachedToAircraft, boolean isUnmounted,
                 ComponentType type, BigDecimal number,
                 int countOfLandings, int startsOnMainChannel,
                 int startsOnReserveChannel, int flightOperatingTime) {
-        super(UUID.randomUUID(), attachedToAircraft, isUnmounted, type, number);
-        this.countOfLandings = countOfLandings;
-        this.startsOnMainChannel = startsOnMainChannel;
-        this.startsOnReserveChannel = startsOnReserveChannel;
-        this.flightOperatingTime = flightOperatingTime;
+        super(UUID.randomUUID(), attachedToAircraft, isUnmounted,
+                type, number, countOfLandings, startsOnMainChannel,
+                startsOnReserveChannel, flightOperatingTime);
     }
 
     @JsonCreator

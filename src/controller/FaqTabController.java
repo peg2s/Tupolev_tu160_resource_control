@@ -21,7 +21,6 @@ public class FaqTabController {
 
     @FXML
     void initialize() {
-        log.info("инициализация.");
         fillFaqText();
     }
 

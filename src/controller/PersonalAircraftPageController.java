@@ -50,7 +50,6 @@ public class PersonalAircraftPageController {
     private AircraftTabController aircraftTabController;
 
     public void setAircraft(Aircraft selectedAircraft) {
-        log.info(" setAircraft: {}", aircraft);
         this.aircraft = selectedAircraft;
         aircraftNumber.setText(aircraft.getSideNumber());
         aircraftName.setText(aircraft.getName());
@@ -62,11 +61,10 @@ public class PersonalAircraftPageController {
 
     @FXML
     void initialize() {
-        log.info(" инициализация.");
         // повесим ограничения на поля, чтобы при редактировании нельзя было ввести недопустимые данные
         aircraftNumber.setTextFormatter(createFormatterForOnlyDigits(2));
         aircraftName.setTextFormatter(createFormatterForOnlyText("^(?i)[А-Я,а-я? ]{0,40}$"));
-        aircraftRegNumber.setTextFormatter(createFormatterForOnlyText("^(?i)rf?-?[0-9]{0,7}"));
+        aircraftRegNumber.setTextFormatter(createFormatterForOnlyText("^[0-9]{0,5}"));
         aircraftAttachedTo.getItems().addAll(SavedData.engineers.stream().map(Engineer::toString).collect(Collectors.toList()));
         unattachSelectedComponent.setOnAction(e -> unattachComponent());
         createNewComponent.setOnAction(e -> openPersonalComponentPage());
@@ -89,7 +87,7 @@ public class PersonalAircraftPageController {
     @FXML
     @SneakyThrows
     void openPersonalComponentPage() {
-        log.info(" openPersonalComponentPage");
+        log.info("Открываем карточку создания или редактирования агрегата");
         MainController mainController = aircraftTabController.getMainController();
         mainController.getAircraftComponentsTabController().openPersonalComponentPage(mainController.getAircraftComponentsTabController());
     }
@@ -105,11 +103,9 @@ public class PersonalAircraftPageController {
     }
 
     private void handleSaveChangesButton() {
-        log.info(" handleSaveChangesButton");
+        log.info(" Изменяем информацию по ВС");
 
-        if (TextUtils.checkInputText(aircraftNumber.getText(),
-                aircraftName.getText(),
-                aircraftRegNumber.getText())
+        if (TextUtils.checkInputText(aircraftNumber, aircraftName, aircraftRegNumber)
                 && aircraftAttachedTo.getSelectionModel().getSelectedItem() != null
                 && TextUtils.checkAircraftRegNumber(aircraftRegNumber.getText())
         ) {

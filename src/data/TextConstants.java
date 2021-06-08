@@ -38,6 +38,9 @@ public class TextConstants {
     public static final String NO_ENGINEERS_RECORDS = "Не введены данные об инженерах.\n" +
             "Добавьте хотя бы одного человека.";
 
+    public static final String NO_COMPONENTS_RECORDS = "Не введены данные об агрегатах.\n" +
+            "Добавьте хотя бы один агрегат";
+
     public static final String SELECT_ENGINEERS_RANK = "Выбери звание инженера!";
 
     public static final String UNATTACHED_FROM_AIRCRAFT = "Снят с ВС. На хранении.";
@@ -67,5 +70,7 @@ public class TextConstants {
 
     public static final String AIRCRAFT_DUPLICATE = "Попытка дублирования записи.\nВС с таким номером или именем уже создан.";
 
-    public static final String  REG_NUMBER_CHECK = "Регистрационный номер самолета должен соответствовать формату RF-*****!";
+    public static final String  REG_NUMBER_CHECK = "Регистрационный номер самолета должен соответствовать формату RF-*****!\nВведите только цифры номера, \"RF-\" будет подставлен автоматически.";
+
+    public static final String NO_COMPLIANT_FOR_L029 = "Не применимо для Л-029";
 }

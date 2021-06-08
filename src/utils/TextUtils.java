@@ -1,11 +1,14 @@
 package utils;
 
 import data.TextConstants;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.UnaryOperator;
+
+import static utils.ServiceUtils.showWarning;
 
 @Slf4j
 public class TextUtils {
@@ -43,20 +46,20 @@ public class TextUtils {
         return new TextFormatter<>(textFilter);
     }
 
-    public static boolean checkAdditionalOperating(String hours, String minutes,
-                                                String rotations, String fireMain,
-                                                String fireReserve, String takeOffs) {
-        int addHours = Integer.parseInt(hours);
-        int addMinutes = Integer.parseInt(minutes);
+    public static boolean checkAdditionalOperating(TextField hours, TextField minutes,
+                                                   TextField rotations, TextField fireMain,
+                                                   TextField fireReserve, TextField takeOffs) {
+        int addHours = Integer.parseInt(hours.getText());
+        int addMinutes = Integer.parseInt(minutes.getText());
         int addRotations;
         try {
-            addRotations = Integer.parseInt(rotations);
-        } catch (NumberFormatException e) {
+            addRotations = Integer.parseInt(rotations.getText());
+        } catch (Exception e) {
             addRotations = 0;
         }
-        int addFireMain = Integer.parseInt(fireMain);
-        int addFireReserve = Integer.parseInt(fireReserve);
-        int addTakeOffs = Integer.parseInt(takeOffs);
+        int addFireMain = Integer.parseInt(fireMain.getText());
+        int addFireReserve = Integer.parseInt(fireReserve.getText());
+        int addTakeOffs = Integer.parseInt(takeOffs.getText());
         if (addFireMain > 12
                 || addFireReserve > 12
                 || addHours > 50
@@ -69,10 +72,11 @@ public class TextUtils {
         return true;
     }
 
-    public static boolean checkInputText(String ... text) {
-        for (String t : text) {
-            log.info("checkInputText. введено значение {}", t);
-            if (StringUtils.isBlank(t)) {
+    public static boolean checkInputText(TextField... textFields) {
+        for (TextField t : textFields) {
+            log.info("В поле {} введено значение {}", t.getId() , t.getText());
+            if (StringUtils.isBlank(t.getText())) {
+                showWarning(TextConstants.EMPTY_FIELD_WARNING);
                 return false;
             }
         }
@@ -80,7 +84,7 @@ public class TextUtils {
     }
 
     public static boolean checkAircraftRegNumber(String regNumber) {
-        if (regNumber.length() < 7) {
+        if (regNumber.length() < 5) {
             ServiceUtils.showWarning(TextConstants.REG_NUMBER_CHECK);
             return false;
         }
