@@ -49,6 +49,7 @@ public class MainController {
 
     @FXML
     void initialize() {
+
         aircraftTabController.setMainController(this);
         aircraftComponentsTabController.setMainController(this);
     }

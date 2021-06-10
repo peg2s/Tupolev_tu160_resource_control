@@ -23,16 +23,14 @@ public class ServiceUtils {
      * а также проверка на несовместимость уже установленных агрегатов с создаваемым.
      * Кроме этого проверяется номер, он должен быть уникальным.
      *
-     * @param createdComponent
-     * @param component
+     * @param component агрегат из сохранения
+     * @param createdComponent созданный агрегат
+     * @param id айдишник агрегата в сохранении
+     * @param isEditMode маркер создания или редактирования
      * @return разрешено ли добавление
      */
     public static boolean checkComponentsOnAircraft(Component component, Component createdComponent,
                                                     int id, boolean isEditMode) {
-        if (component.getType() != createdComponent.getType()) {
-            showWarning(TextConstants.TYPE_CHANGE_DENIED);
-            return false;
-        }
         if (checkComponentDuplicate(component, createdComponent, id)) {
             Aircraft aircraft = SavedData.getAircraft(createdComponent.getAttachedToAircraft());
             // если агрегат не установлен на ВС, то нет ограничений

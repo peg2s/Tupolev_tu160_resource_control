@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -194,6 +195,8 @@ public class AircraftTabController {
         Scene scene = new Scene(page);
         dialogStage.setScene(scene);
         dialogStage.setResizable(false);
+        dialogStage.getIcons().add(new Image("/images/logo.jpg"));
+
         PersonalAircraftPageController controller = loader.getController();
         controller.setAircraftTabController(this);
         controller.setAircraft(aircraftsList.getSelectionModel().getSelectedItem());

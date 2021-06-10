@@ -45,12 +45,7 @@ public class TextConstants {
 
     public static final String UNATTACHED_FROM_AIRCRAFT = "Снят с ВС. На хранении.";
 
-    public static final String CHECK_ALL_FIELDS_FILLED = "Проверьте заполнение полей! \n" +
-            "Все поля должны быть заполнены!";
-
     public static final String ADDITIONAL_OPERATING_ADDED = "Наработка успешно добавлена.";
-
-    public static final String CHECK_ADDITIONAL_OPERATING_INPUT = "Проверьте, что все поля заполнены. \nЕсли изменений не было, введите в это поле 0.";
 
     public static final String NO_ENGINEER_ATTACHED = "За данным ВС не закреплен ни один инженер СПиСО";
 
@@ -65,8 +60,6 @@ public class TextConstants {
     public static final String ATTENTION = "Внимание!";
 
     public static final String EMPTY_FIELD_WARNING = "Проверьте, что все поля заполнены.";
-
-    public static final String TYPE_CHANGE_DENIED = "Смена типа агрегата через редактирование запрещена.\nПри необходимости создайте новый агрегат.";
 
     public static final String AIRCRAFT_DUPLICATE = "Попытка дублирования записи.\nВС с таким номером или именем уже создан.";
 

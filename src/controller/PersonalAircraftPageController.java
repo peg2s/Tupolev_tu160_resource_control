@@ -89,7 +89,9 @@ public class PersonalAircraftPageController {
     void openPersonalComponentPage() {
         log.info("Открываем карточку создания или редактирования агрегата");
         MainController mainController = aircraftTabController.getMainController();
-        mainController.getAircraftComponentsTabController().openPersonalComponentPage(mainController.getAircraftComponentsTabController());
+        PersonalComponentPageController componentPageController = mainController.getAircraftComponentsTabController()
+                .openPersonalComponentPage(mainController.getAircraftComponentsTabController());
+        componentPageController.setPersonalAircraftPageController(this);
     }
 
     public void updateComponentsList() {

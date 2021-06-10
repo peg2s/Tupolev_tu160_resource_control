@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -66,6 +67,7 @@ public class AircraftComponentsTabController {
         componentIdColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         componentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         componentAttachedToColumn.setCellValueFactory(new PropertyValueFactory<>("attachedToAircraft"));
+
     }
 
     @FXML
@@ -85,9 +87,9 @@ public class AircraftComponentsTabController {
         Scene scene = new Scene(page);
         dialogStage.setScene(scene);
         dialogStage.setResizable(false);
+        dialogStage.getIcons().add(new Image("/images/logo.jpg"));
         PersonalComponentPageController controller = loader.getController();
         controller.setParentController(aircraftComponentsTabController);
-        controller.setMainController(mainController);
         dialogStage.show();
         SavedData.readDataFromSave();
         return controller;

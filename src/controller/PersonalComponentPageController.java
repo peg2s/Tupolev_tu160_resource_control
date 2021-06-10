@@ -4,10 +4,7 @@ import data.*;
 import data.enums.ComponentType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -22,7 +19,8 @@ import java.util.EnumSet;
 import java.util.stream.Collectors;
 
 import static data.enums.ComponentType.L029;
-import static utils.ServiceUtils.*;
+import static utils.ServiceUtils.checkComponentsOnAircraft;
+import static utils.ServiceUtils.showWarning;
 import static utils.TextUtils.*;
 
 @Slf4j
@@ -34,6 +32,8 @@ public class PersonalComponentPageController {
     private TextField componentNumber;
     @FXML
     private ChoiceBox<ComponentType> componentType;
+    @FXML
+    private Label componentTypeLabel;
     @FXML
     private TextField hoursOperTime;
     @FXML
@@ -68,7 +68,7 @@ public class PersonalComponentPageController {
     private AnchorPane specificForMkuMpuPane;
     @FXML
     @Setter
-    private MainController mainController;
+    private PersonalAircraftPageController personalAircraftPageController;
     @Getter
     private Component createdComponent;
     private boolean isUnmountedFromAircraft;
@@ -85,7 +85,7 @@ public class PersonalComponentPageController {
         hoursOperTime.setTextFormatter(createFormatterForOnlyDigits(4));
         minutesOperTime.setTextFormatter(createFormatterForMinutes());
         componentNumber.setTextFormatter(createFormatterForOnlyDigits(30));
-        rotationsCount.setTextFormatter(createFormatterForOnlyDigits(2));
+        rotationsCount.setTextFormatter(createFormatterForOnlyDigits(3));
         mainChannelFireCount.setTextFormatter(createFormatterForOnlyDigits(3));
         reserveChannelFireCount.setTextFormatter(createFormatterForOnlyDigits(3));
         takeOffCount.setTextFormatter(createFormatterForOnlyDigits(4));
@@ -112,6 +112,9 @@ public class PersonalComponentPageController {
     public void prepareComponentToEdit(Component component) {
         log.info("Окно редактирования компонента {}", component);
         isEditMode = true;
+        componentType.setVisible(false);
+        componentTypeLabel.setVisible(true);
+        componentTypeLabel.setText("изд. " + component.getType().getName());
         componentIdInSavedData = SavedData.getComponentId(component);
         this.createdComponent = component;
         this.selectedComponent = component;
@@ -141,6 +144,9 @@ public class PersonalComponentPageController {
                 process(createdComponent);
             }
             SavedData.saveCurrentStateData();
+            if (personalAircraftPageController != null) {
+                personalAircraftPageController.updateComponentsList();
+            }
         }
     }
 
@@ -178,14 +184,12 @@ public class PersonalComponentPageController {
 
     @FXML
     public void handleClickCreateButton() {
-        createComponent();
-        if (createdComponent != null) {
-            controller.setSelectedComponent(createdComponent);
-        }
         if (checkInputIsNotBlank()) {
+            createComponent();
+            if (createdComponent != null) {
+                controller.setSelectedComponent(createdComponent);
+            }
             ((Stage) createButton.getScene().getWindow()).close();
-        } else {
-            showWarning(TextConstants.CHECK_ALL_FIELDS_FILLED);
         }
         log.info("handleClickCreateButton, нажата кнопка создать");
     }
@@ -195,23 +199,16 @@ public class PersonalComponentPageController {
     }
 
     boolean checkInputIsNotBlank() {
+        ComponentType type = componentType.getSelectionModel().getSelectedItem();
         boolean checkOk = checkInputText(componentNumber, hoursOperTime,
                 minutesOperTime, takeOffCount,
                 mainChannelFireCount, reserveChannelFireCount)
-                && componentType.getSelectionModel().getSelectedItem() != null
-                && (componentAttachedTo.getSelectionModel().getSelectedItem() != null || isUnmountedFromAircraft);
-
-        if (createdComponent.getType() == L029) {
-            if (!checkOk) {
-                showWarning(TextConstants.EMPTY_FIELD_WARNING);
-                return false;
-            }
-            return true;
+                && type != null && (componentAttachedTo.getSelectionModel().getSelectedItem() != null
+                || isUnmountedFromAircraft);
+        if (!checkOk) {
+            return false;
         } else {
-            if (!checkOk && checkInputText(rotationsCount)) {
-                return false;
-            }
-            return checkOk && checkInputText(rotationsCount);
+            return type.equals(L029) || checkInputText(rotationsCount);
         }
     }
 
@@ -227,15 +224,15 @@ public class PersonalComponentPageController {
         if (createdComponent instanceof MPU_MKU) {
             rotationsCount.setText(String.valueOf(((MPU_MKU) (createdComponent)).getRotationsCount()));
         }
-            isUnmounted.setSelected(createdComponent.isUnmounted());
-            handleUnmountCheckboxSelected();
-            if (!createdComponent.isUnmounted()) {
-                componentAttachedTo.setValue(SavedData.aircraft.stream()
-                        .filter(a -> a.toString()
-                                .equals(createdComponent
-                                        .getAttachedToAircraft()))
-                        .findAny().get().toString());
-            }
+        isUnmounted.setSelected(createdComponent.isUnmounted());
+        handleUnmountCheckboxSelected();
+        if (!createdComponent.isUnmounted()) {
+            componentAttachedTo.setValue(SavedData.aircraft.stream()
+                    .filter(a -> a.toString()
+                            .equals(createdComponent
+                                    .getAttachedToAircraft()))
+                    .findAny().get().toString());
+        }
         hideSpecificFields();
     }
 

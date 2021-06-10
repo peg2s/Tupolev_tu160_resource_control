@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -79,6 +80,7 @@ public class EngineersTabController {
                 Scene scene = new Scene(page);
                 dialogStage.setScene(scene);
                 dialogStage.setResizable(false);
+                dialogStage.getIcons().add(new Image("/images/logo.jpg"));
                 PersonalEngineerPageController controller = loader.getController();
                 controller.setEngineersTabController(this);
                 controller.setEngineer(listOfEngineers.getSelectionModel().getSelectedItem());
