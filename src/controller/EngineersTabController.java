@@ -19,10 +19,12 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import utils.ServiceUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.stream.Collectors;
 
 import static utils.TextUtils.createFormatterForOnlyText;
 
@@ -64,7 +66,13 @@ public class EngineersTabController {
         if (listOfEngineers != null) {
             listOfEngineers.getItems().clear();
             for (Engineer engineer : SavedData.engineers) {
-                listOfEngineers.getItems().addAll(engineer);
+                engineer.getAttachedAircrafts().clear();
+                engineer.getAttachedAircrafts().addAll(
+                        SavedData.aircraft.stream()
+                                .filter(aircraft -> aircraft.getEngineer()
+                                        .equals(engineer.toString()))
+                                .collect(Collectors.toList()));
+                listOfEngineers.getItems().add(engineer);
             }
         }
     }
@@ -103,11 +111,15 @@ public class EngineersTabController {
         if (StringUtils.isNotBlank(fullEngineersName.getCharacters()) && militaryRank.getSelectionModel().getSelectedItem() != null) {
             Engineer engineer = new Engineer(
                     militaryRank.getSelectionModel().getSelectedItem(),
-                    fullEngineersName.getText(),
+                    fullEngineersName.getText().toUpperCase(),
                     new ArrayList<>());
-            listOfEngineers.getItems().addAll(engineer);
-            SavedData.engineers.add(engineer);
-            SavedData.saveCurrentStateData();
+            if (!SavedData.engineers.contains(engineer)) {
+                listOfEngineers.getItems().addAll(engineer);
+                SavedData.engineers.add(engineer);
+                SavedData.saveCurrentStateData();
+            } else {
+                ServiceUtils.showWarning(TextConstants.ERROR_ENGINEER_DUPLICATE);
+            }
             log.info("Добавлен инженер: {}", engineer);
         }
     }
@@ -125,15 +137,34 @@ public class EngineersTabController {
     void editEngineer() {
         if (StringUtils.isNotBlank(fullEngineersName.getCharacters())
                 && militaryRank.getSelectionModel().getSelectedItem() != null) {
-            listOfEngineers.getSelectionModel().getSelectedItem().setFullName(fullEngineersName.getText());
-            listOfEngineers.getSelectionModel().getSelectedItem().setRank(militaryRank.getSelectionModel().getSelectedItem());
+            if (SavedData.engineers
+                    .stream().noneMatch(c -> c.toString()
+                            .equals(militaryRank.getSelectionModel().getSelectedItem().toString()
+                                    + " "
+                                    + fullEngineersName.getCharacters()))) {
+                SavedData.aircraft.stream()
+                        .filter(aircraft -> aircraft.getEngineer()
+                                .equals(listOfEngineers.getSelectionModel().getSelectedItem().toString()))
+                        .forEach(aircraft -> aircraft.setEngineer(militaryRank.getSelectionModel().getSelectedItem()
+                                + " "
+                        + fullEngineersName.getText().toUpperCase()));
+                listOfEngineers.getSelectionModel().getSelectedItem().setFullName(fullEngineersName.getText().toUpperCase());
+                listOfEngineers.getSelectionModel().getSelectedItem().setRank(militaryRank.getSelectionModel().getSelectedItem());
+                SavedData.saveCurrentStateData();
+                updateEngineersList();
+                log.info("Редактирование инженера {}, новые данные {} {}",
+                        listOfEngineers.getSelectionModel().getSelectedItem(),
+                        militaryRank.getSelectionModel().getSelectedItem(),
+                        fullEngineersName.getText());
+            } else if (!listOfEngineers.getSelectionModel().getSelectedItem().toString()
+                    .equalsIgnoreCase(militaryRank.getSelectionModel().getSelectedItem().toString()
+                            + " "
+                            + fullEngineersName.getCharacters())){
+                ServiceUtils.showWarning(TextConstants.ERROR_ENGINEER_DUPLICATE);
+            }
+        } else {
+            ServiceUtils.showWarning(TextConstants.EMPTY_FIELD_WARNING);
         }
-        SavedData.saveCurrentStateData();
-        updateEngineersList();
-        log.info("Редактирование инженера {}, новые данные {} {}",
-                listOfEngineers.getSelectionModel().getSelectedItem(),
-                militaryRank.getSelectionModel().getSelectedItem(),
-                fullEngineersName.getText());
     }
 }
 

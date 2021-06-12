@@ -1,6 +1,7 @@
 package controller;
 
 import data.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -10,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import utils.TextUtils;
 
 import java.util.stream.Collectors;
 
@@ -30,7 +30,7 @@ public class PersonalAircraftPageController {
     private TextField aircraftRegNumber;
 
     @FXML
-    private ChoiceBox<String> aircraftAttachedTo;
+    private ChoiceBox<Engineer> aircraftAttachedTo;
 
     @FXML
     @Getter
@@ -53,9 +53,9 @@ public class PersonalAircraftPageController {
         this.aircraft = selectedAircraft;
         aircraftNumber.setText(aircraft.getSideNumber());
         aircraftName.setText(aircraft.getName());
-        aircraftRegNumber.setText(aircraft.getRegNumber());
+        aircraftRegNumber.setText(aircraft.getRegNumber().replaceAll("RF-", ""));
         componentsOnAircraft.getItems().addAll(SavedData.getAircraft(selectedAircraft.toString()).getComponents());
-        aircraftAttachedTo.setValue(aircraft.getEngineer());
+        aircraftAttachedTo.setValue(SavedData.getEngineerFromList(aircraft.getEngineer()));
 
     }
 
@@ -65,7 +65,7 @@ public class PersonalAircraftPageController {
         aircraftNumber.setTextFormatter(createFormatterForOnlyDigits(2));
         aircraftName.setTextFormatter(createFormatterForOnlyText("^(?i)[А-Я,а-я? ]{0,40}$"));
         aircraftRegNumber.setTextFormatter(createFormatterForOnlyText("^[0-9]{0,5}"));
-        aircraftAttachedTo.getItems().addAll(SavedData.engineers.stream().map(Engineer::toString).collect(Collectors.toList()));
+        aircraftAttachedTo.getItems().addAll(FXCollections.observableList(SavedData.engineers));
         unattachSelectedComponent.setOnAction(e -> unattachComponent());
         createNewComponent.setOnAction(e -> openPersonalComponentPage());
         saveChanges.setOnAction(e -> handleSaveChangesButton());
@@ -106,20 +106,7 @@ public class PersonalAircraftPageController {
 
     private void handleSaveChangesButton() {
         log.info(" Изменяем информацию по ВС");
-
-        if (TextUtils.checkInputText(aircraftNumber, aircraftName, aircraftRegNumber)
-                && aircraftAttachedTo.getSelectionModel().getSelectedItem() != null
-                && TextUtils.checkAircraftRegNumber(aircraftRegNumber.getText())
-        ) {
-            SavedData.aircraft.stream().filter(a -> a.equals(aircraft)).forEach(a -> {
-                a.setEngineer(aircraftAttachedTo.getSelectionModel().getSelectedItem());
-                a.setName(aircraftName.getText());
-                a.setRegNumber(aircraftRegNumber.getText());
-                a.setSideNumber(aircraftNumber.getText());
-            });
-            SavedData.saveCurrentStateData();
-            aircraftTabController.updateAircraftsList();
-        }
+        aircraftTabController.edit(aircraftNumber, aircraftRegNumber, aircraftName, aircraftAttachedTo, aircraft);
     }
 
 }

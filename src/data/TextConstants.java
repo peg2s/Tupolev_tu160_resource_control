@@ -66,4 +66,8 @@ public class TextConstants {
     public static final String  REG_NUMBER_CHECK = "Регистрационный номер самолета должен соответствовать формату RF-*****!\nВведите только цифры номера, \"RF-\" будет подставлен автоматически.";
 
     public static final String NO_COMPLIANT_FOR_L029 = "Не применимо для Л-029";
+
+    public static final String ERROR_EDIT_ENGINEER = "Одно из полей не заполнено или такой инженер уже есть в списке.";
+
+    public static final String ERROR_ENGINEER_DUPLICATE = "Такой инженер уже есть в списке.";
 }

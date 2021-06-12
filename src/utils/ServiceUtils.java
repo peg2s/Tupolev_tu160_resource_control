@@ -95,7 +95,7 @@ public class ServiceUtils {
                .stream()
                .anyMatch(a-> a.getSideNumber().equals(aircraft.getSideNumber())
                        || a.getRegNumber().equals(aircraft.getRegNumber())
-                       || a.getName().equals(aircraft.getName()));
+                       || a.getName().equalsIgnoreCase(aircraft.getName()));
        if (isCheckFailed) {
            showWarning(TextConstants.AIRCRAFT_DUPLICATE);
        }

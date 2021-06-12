@@ -86,7 +86,7 @@ public class AircraftTabController {
             selectedAircraft = aircraftsList.getSelectionModel().getSelectedItem();
             aircraftName.setText(selectedAircraft.getName());
             sideNumberField.setText(selectedAircraft.getSideNumber());
-            regNumberField.setText(selectedAircraft.getRegNumber());
+            regNumberField.setText(selectedAircraft.getRegNumber().replaceAll("RF-", ""));
             selectEngineerBox.getSelectionModel()
                     .select(SavedData.getEngineerFromList(
                             selectedAircraft.getEngineer()));
@@ -97,8 +97,8 @@ public class AircraftTabController {
     void addAircraft() {
         if (checkInputFields()) {
             Aircraft aircraft = Aircraft.builder()
-                    .name(aircraftName.getText())
-                    .regNumber(regNumberField.getText())
+                    .name(aircraftName.getText().toUpperCase())
+                    .regNumber("RF-" + regNumberField.getText())
                     .sideNumber(sideNumberField.getText())
                     .engineer(selectEngineerBox.getSelectionModel().getSelectedItem().toString())
                     .components(new ArrayList<>())
@@ -137,40 +137,39 @@ public class AircraftTabController {
 
     @FXML
     void editAircraft() {
-        if (StringUtils.isNotBlank(sideNumberField.getCharacters())
-                && StringUtils.isNotBlank(regNumberField.getCharacters())
-                && StringUtils.isNotBlank(aircraftName.getCharacters())
-                && selectEngineerBox.getSelectionModel().getSelectedItem() != null) {
+        edit(sideNumberField, regNumberField, aircraftName, selectEngineerBox, selectedAircraft);
+    }
 
-            reattachAircraft(selectedAircraft);
-            SavedData.aircraft.stream().filter(a -> a.equals(selectedAircraft))
+    public void edit(TextField sideNumber, TextField regNumber,
+                     TextField name, ChoiceBox engineer, Aircraft aircraft) {
+        if (StringUtils.isNotBlank(sideNumber.getCharacters())
+                && StringUtils.isNotBlank(regNumber.getCharacters())
+                && StringUtils.isNotBlank(name.getCharacters())
+                && engineer.getSelectionModel().getSelectedItem() != null
+                && SavedData.aircraft.stream()
+                .filter(a -> a.getName().equalsIgnoreCase(aircraftName.getText())
+                        || a.getSideNumber().equals(sideNumber.getText())
+                        || a.getRegNumber().equals("RF-" + regNumber.getText())).count() == 1) {
+
+            SavedData.aircraft.stream().filter(a -> a.equals(aircraft))
                     .forEach(a -> {
-                        selectedAircraft.setSideNumber(sideNumberField.getText());
-                        selectedAircraft.setRegNumber("RF-" + regNumberField.getText());
-                        selectedAircraft.setEngineer(selectEngineerBox.getSelectionModel().getSelectedItem().toString());
-                        selectedAircraft.setName(aircraftName.getText());
+                        a.setSideNumber(sideNumber.getText());
+                        a.setRegNumber("RF-" + regNumber.getText());
+                        a.setEngineer(engineer.getSelectionModel().getSelectedItem().toString());
+                        a.setName(name.getText().toUpperCase());
                     });
+            SavedData.saveCurrentStateData();
+            updateAircraftsList();
+            log.info("Редактирование ВС: {}", aircraft);
+        } else {
+            showWarning(TextConstants.AIRCRAFT_DUPLICATE);
         }
-        SavedData.saveCurrentStateData();
-        updateAircraftsList();
-        log.info("Редактирование ВС: {}", selectedAircraft);
     }
 
     void reloadInfoOnTab() {
         updateAircraftsList();
         updateEngineersListOnAircraftTab();
         aircraftsList.refresh();
-    }
-
-    void reattachAircraft(Aircraft aircraft) {
-        SavedData.engineers
-                .stream()
-                .filter(e -> e.toString().equals(aircraft.getEngineer()))
-                .forEach(engineer -> engineer.getAttachedAircrafts().remove(aircraft));
-        selectEngineerBox.getSelectionModel().getSelectedItem().getAttachedAircrafts().add(selectedAircraft);
-        log.info("Переприкрепление ИАК на самолете: {} на: {}",
-                selectedAircraft, selectEngineerBox.getSelectionModel().getSelectedItem());
-        SavedData.saveCurrentStateData();
     }
 
     void updateAircraftsList() {
@@ -206,10 +205,9 @@ public class AircraftTabController {
     }
 
     private boolean checkInputFields() {
-        boolean checkOk =  checkInputText(regNumberField, sideNumberField, aircraftName)
+        boolean checkOk = checkInputText(regNumberField, sideNumberField, aircraftName)
                 && selectEngineerBox.getSelectionModel().getSelectedItem() != null;
         if (!checkOk) {
-            showWarning(TextConstants.EMPTY_FIELD_WARNING);
             return false;
         } else return TextUtils.checkAircraftRegNumber(regNumberField.getText());
     }
