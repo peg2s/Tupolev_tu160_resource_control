@@ -9,7 +9,7 @@
             prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.AttachAircraftToEngineerController">
     <children>
-        <ListView fx:id="listOfAircaftToAttach" prefHeight="353.0" prefWidth="600.0"/>
+        <ListView fx:id="listOfAircraftToAttach" prefHeight="353.0" prefWidth="600.0"/>
         <Button fx:id="attachButton" layoutX="259.0" layoutY="364.0" mnemonicParsing="false" text="Прикрепить" onAction="#handleClickAttachButton"/>
     </children>
 </AnchorPane>

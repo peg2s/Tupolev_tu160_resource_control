@@ -127,6 +127,10 @@ public class EngineersTabController {
     @FXML
     void deleteEngineer() {
         SavedData.engineers.remove(listOfEngineers.getSelectionModel().getSelectedItem());
+        SavedData.aircraft.stream()
+                .filter(aircraft -> aircraft.getEngineer()
+                        .equalsIgnoreCase(listOfEngineers.getSelectionModel().getSelectedItem().toString()))
+                .forEach(aircraft -> aircraft.setEngineer(TextConstants.NO_ENGINEER_ATTACHED));
         SavedData.saveCurrentStateData();
         log.info("Удален инженер :{}", listOfEngineers.getSelectionModel().getSelectedItem());
         listOfEngineers.getItems().remove(listOfEngineers.getSelectionModel().getSelectedItem());
