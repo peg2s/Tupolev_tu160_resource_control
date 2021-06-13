@@ -6,10 +6,18 @@ import data.SavedData;
 import data.TextConstants;
 import data.enums.ComponentType;
 import javafx.scene.control.Alert;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class ServiceUtils {
+
+    /**
+     * Метод выводит диалоговое окно с переданным текстом.
+     *
+     * @param text Выводимый текст
+     */
     public static void showWarning(String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(TextConstants.ATTENTION);
@@ -23,10 +31,10 @@ public class ServiceUtils {
      * а также проверка на несовместимость уже установленных агрегатов с создаваемым.
      * Кроме этого проверяется номер, он должен быть уникальным.
      *
-     * @param component агрегат из сохранения
+     * @param component        агрегат из сохранения
      * @param createdComponent созданный агрегат
-     * @param id айдишник агрегата в сохранении
-     * @param isEditMode маркер создания или редактирования
+     * @param id               айдишник агрегата в сохранении
+     * @param isEditMode       маркер создания или редактирования
      * @return разрешено ли добавление
      */
     public static boolean checkComponentsOnAircraft(Component component, Component createdComponent,
@@ -70,6 +78,14 @@ public class ServiceUtils {
         return false;
     }
 
+    /**
+     * Проверка агрегата на дубликат
+     *
+     * @param component агрегат до редактирования
+     * @param createdComponent созданный или отредактированных агрегат
+     * @param id айди агрегата в сохранении (если есть)
+     * @return разрешено ли добавление или изменение агрегата
+     */
     public static boolean checkComponentDuplicate(Component component,
                                                   Component createdComponent,
                                                   int id) {
@@ -90,15 +106,21 @@ public class ServiceUtils {
         return true;
     }
 
+    /**
+     * Проверка самолета на дубликат при создании и редактировании
+     *
+     * @param aircraft - создаваемый или редактируемый самолет
+     * @return возможно ли редактирование или создание
+     */
     public static boolean checkAircraftDuplicate(Aircraft aircraft) {
-       boolean isCheckFailed = SavedData.aircraft
-               .stream()
-               .anyMatch(a-> a.getSideNumber().equals(aircraft.getSideNumber())
-                       || a.getRegNumber().equals(aircraft.getRegNumber())
-                       || a.getName().equalsIgnoreCase(aircraft.getName()));
-       if (isCheckFailed) {
-           showWarning(TextConstants.AIRCRAFT_DUPLICATE);
-       }
-       return isCheckFailed;
+        boolean isCheckFailed = SavedData.aircraft
+                .stream()
+                .anyMatch(a -> a.getSideNumber().equals(aircraft.getSideNumber())
+                        || a.getRegNumber().equals(aircraft.getRegNumber())
+                        || a.getName().equalsIgnoreCase(aircraft.getName()));
+        if (isCheckFailed) {
+            showWarning(TextConstants.AIRCRAFT_DUPLICATE);
+        }
+        return isCheckFailed;
     }
 }

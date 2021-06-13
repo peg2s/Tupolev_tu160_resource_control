@@ -11,12 +11,6 @@ public class MainController {
     Tab aircraftTabButton;
 
     @FXML
-    Tab engineerTabButton;
-
-//    @FXML
-//    Tab componentsTabButton;
-
-    @FXML
     @Getter
     AircraftTabController aircraftTabController;
 
@@ -49,9 +43,7 @@ public class MainController {
 
     @FXML
     void initialize() {
-
         aircraftTabController.setMainController(this);
-        aircraftComponentsTabController.setMainController(this);
     }
 
 

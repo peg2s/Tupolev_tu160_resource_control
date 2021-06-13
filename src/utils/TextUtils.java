@@ -13,6 +13,12 @@ import static utils.ServiceUtils.showWarning;
 @Slf4j
 public class TextUtils {
 
+    /**
+     * Создание ограничений на ввод данных в TextField
+     *
+     * @param maxLength - максимально разрешенное число символов
+     * @return TextFormatter с установленными ограничениями
+     */
     public static TextFormatter<Integer> createFormatterForOnlyDigits(int maxLength) {
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String newText = change.getControlNewText();
@@ -24,6 +30,12 @@ public class TextUtils {
         return new TextFormatter<>(integerFilter);
     }
 
+    /**
+     * Создание ограничений на ввод данных в поля, содержащие минуты.
+     * Диапазон данных 0-9 минут или 0-59 минут
+     *
+     * @return TextFormatter с установленными ограничениями
+     */
     public static TextFormatter<Integer> createFormatterForMinutes() {
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String newText = change.getControlNewText();
@@ -35,6 +47,12 @@ public class TextUtils {
         return new TextFormatter<>(integerFilter);
     }
 
+    /**
+     * Создание ограничений на ввод данных в поля, содержащие текст
+     *
+     * @param regexp - регулярка, по которой проверяется вводимый текст
+     * @return TextFormatter с установленными ограничениями
+     */
     public static TextFormatter<String> createFormatterForOnlyText(String regexp) {
         UnaryOperator<TextFormatter.Change> textFilter = change -> {
             String newText = change.getControlNewText();
@@ -46,6 +64,18 @@ public class TextUtils {
         return new TextFormatter<>(textFilter);
     }
 
+    /**
+     * Проверка возможности добавления введенной наработки за летную смену
+     *
+     * @param hours - часы
+     * @param minutes - минуты
+     * @param rotations - число поворотов
+     * @param fireMain - пуски по осн. каналу
+     * @param fireReserve - пуски по рез. каналу
+     * @param takeOffs - число взлёт-посадок
+     * @return разрешено ли добавление
+     *
+     */
     public static boolean checkAdditionalOperating(TextField hours, TextField minutes,
                                                    TextField rotations, TextField fireMain,
                                                    TextField fireReserve, TextField takeOffs) {
@@ -72,6 +102,12 @@ public class TextUtils {
         return true;
     }
 
+    /**
+     *  Проверка вводимого текста на пустое поле
+     *
+     * @param textFields - массив вводимых данных
+     * @return пройдена ли проверка
+     */
     public static boolean checkInputText(TextField... textFields) {
         for (TextField t : textFields) {
             log.info("В поле {} введено значение {}", t.getId() , t.getText());
@@ -83,6 +119,12 @@ public class TextUtils {
         return true;
     }
 
+    /**
+     *  Проверка рег.номера ВС на длину.
+     *
+     * @param regNumber - рег.номер самолета
+     * @return пройдена ли проверка
+     */
     public static boolean checkAircraftRegNumber(String regNumber) {
         if (regNumber.length() < 5) {
             ServiceUtils.showWarning(TextConstants.REG_NUMBER_CHECK);

@@ -27,7 +27,7 @@
                         <TitledPane animated="false" style="-fx-font-weight: bold;" text="2. Подготовка к работе">
                             <AnchorPane minHeight="250.0" minWidth="0.0" prefHeight="250.0" prefWidth="200.0">
                                 <children>
-                                    <TextArea fx:id="prepairingToWork" cacheShape="false" centerShape="false" editable="false" focusTraversable="false" layoutY="-20.0" minHeight="250.0" prefHeight="250.0" scaleShape="false" wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
+                                    <TextArea fx:id="preparingToWork" cacheShape="false" centerShape="false" editable="false" focusTraversable="false" layoutY="-20.0" minHeight="250.0" prefHeight="250.0" scaleShape="false" wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
                                         <font>
                                             <Font size="14.0" />
                                         </font>

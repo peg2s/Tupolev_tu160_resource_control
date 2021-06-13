@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="730.0" maxWidth="1200.0" minHeight="700.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AircraftComponentsTabController">
+<AnchorPane maxHeight="700.0" maxWidth="1200.0" minHeight="700.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AircraftComponentsTabController">
 <children>
-                    <TableView fx:id="componentsList" prefHeight="509.0" prefWidth="985.0" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+                    <TableView fx:id="componentsList" prefHeight="509.0" prefWidth="985.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
                         <columns>
                             <TableColumn fx:id="componentIdColumn" maxWidth="399.0" minWidth="50.0" prefWidth="82.0" text="номер" />
                             <TableColumn fx:id="componentTypeColumn" maxWidth="399.0" minWidth="50.0" prefWidth="206.0" text="тип агрегата" />
@@ -18,7 +18,7 @@
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                         </columnResizePolicy>
                     </TableView>
-                    <AnchorPane layoutX="14.0" layoutY="522.0" prefHeight="68.0" prefWidth="985.0" style="-fx-background-color: silver;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="640.0">
+                    <AnchorPane layoutX="14.0" layoutY="522.0" prefHeight="68.0" prefWidth="985.0" style="-fx-background-color: silver;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="600.0">
          <children>
                           <HBox alignment="CENTER" prefHeight="110.0" prefWidth="585.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
                               <children>

@@ -15,7 +15,7 @@ import java.util.Optional;
 public class AttachAircraftToEngineerController {
 
     @FXML
-    private ListView<Aircraft> listOfAircaftToAttach;
+    private ListView<Aircraft> listOfAircraftToAttach;
 
     @FXML
     private Button attachButton;
@@ -23,12 +23,12 @@ public class AttachAircraftToEngineerController {
     @SneakyThrows
     @FXML
     void initialize() {
-        listOfAircaftToAttach.getItems().addAll(SavedData.aircraft);
+        listOfAircraftToAttach.getItems().addAll(SavedData.aircraft);
     }
 
     public Optional<Aircraft> handleClickAttachButton() {
         ((Stage) attachButton.getScene().getWindow()).close();
-        return Optional.ofNullable(listOfAircaftToAttach.getSelectionModel().getSelectedItem());
+        return Optional.ofNullable(listOfAircraftToAttach.getSelectionModel().getSelectedItem());
     }
 
 }

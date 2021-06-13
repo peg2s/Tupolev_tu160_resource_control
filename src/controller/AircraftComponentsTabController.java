@@ -43,10 +43,6 @@ public class AircraftComponentsTabController {
     @FXML
     private Button deleteComponentButton;
 
-    @FXML
-    @Setter
-    private MainController mainController;
-
     private Component selectedComponent;
 
     @FXML

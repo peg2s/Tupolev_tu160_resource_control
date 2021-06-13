@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="730.0" minHeight="700.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AircraftTabController">
     <children>
-        <AnchorPane style="-fx-background-color: silver;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="640.0">
+        <AnchorPane style="-fx-background-color: silver;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="600.0">
          <children>
               <HBox alignment="CENTER" fillHeight="false" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="0.0">
                   <children>
@@ -25,7 +25,7 @@
                </padding>
               </HBox>
          </children></AnchorPane>
-        <TableView fx:id="aircraftsList" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+        <TableView fx:id="aircraftsList" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
             <columns>
                 <TableColumn fx:id="sideNumberColumn" maxWidth="150.0" minWidth="0.0" prefWidth="30.0" style="-fx-alignment: CENTER;" text="б/н" />
                 <TableColumn fx:id="regNumberColumn" maxWidth="250.0" minWidth="0.0" prefWidth="200.0" style="-fx-alignment: CENTER;" text="рег. номер" />
@@ -36,7 +36,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
         </TableView>
-        <HBox alignment="CENTER" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="600.0">
+        <HBox alignment="CENTER" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="555.0">
             <children>
                 <TextField fx:id="sideNumberField" alignment="CENTER" prefHeight="25.0" prefWidth="58.0" />
             <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="29.0" text="RF-" />

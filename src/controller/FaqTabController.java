@@ -11,7 +11,7 @@ public class FaqTabController {
     @FXML
     private TextArea introduction;
     @FXML
-    private TextArea prepairingToWork;
+    private TextArea preparingToWork;
     @FXML
     private TextArea workInstruction;
     @FXML
@@ -27,7 +27,7 @@ public class FaqTabController {
     @FXML
     void fillFaqText() {
         introduction.setText(INTRODUCTION_FAQ);
-        prepairingToWork.setText(PREPAIRING_TO_WORK_FAQ);
+        preparingToWork.setText(PREPAIRING_TO_WORK_FAQ);
         workInstruction.setText(WORK_INSTRUCTIONS_FAQ);
         saveAndLoadInstruction.setText(SAVE_AND_LOAD_FAQ);
         feedbackText.setText(CONTACTS_AND_FEEDBACK_FAQ);
