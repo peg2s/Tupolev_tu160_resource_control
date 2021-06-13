@@ -139,7 +139,7 @@ public class EngineersTabController {
                 && militaryRank.getSelectionModel().getSelectedItem() != null) {
             if (SavedData.engineers
                     .stream().noneMatch(c -> c.toString()
-                            .equals(militaryRank.getSelectionModel().getSelectedItem().toString()
+                            .equalsIgnoreCase(militaryRank.getSelectionModel().getSelectedItem().toString()
                                     + " "
                                     + fullEngineersName.getCharacters()))) {
                 SavedData.aircraft.stream()
